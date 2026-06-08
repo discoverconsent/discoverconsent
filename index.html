@@ -46,7 +46,7 @@
       --transition:   .15s ease;
     }
 
-    html { scroll-behavior: smooth; }
+    html { }
 
     body {
       background: var(--bg);
@@ -703,7 +703,11 @@ function render() {
   app.classList.remove('fade-in');
   void app.offsetWidth;
   app.classList.add('fade-in');
-  window.scrollTo(0, 0);
+
+  // Force scroll to top — multiple methods for cross-browser reliability
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
 }
 
 // ═══════════════════════════════════════════════════════
