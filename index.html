@@ -3,150 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="A private, anonymous consent conversation tool for couples and groups. No accounts. No emails. No tracking. Your answers never leave your device.">
+  <meta name="description" content="A private, anonymous consent conversation tool for couples and groups. No accounts. No emails. No tracking.">
   <meta name="theme-color" content="#08080b">
   <meta property="og:title" content="Discover Consent">
   <meta property="og:description" content="Find your common ground. A private tool for honest conversations — no accounts, no emails, no data stored.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://discoverconsent.com">
   <title>Discover Consent</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:           #08080b;
-      --surface:      #101014;
-      --surface-2:    #17171d;
-      --surface-3:    #1e1e26;
-      --border:       #222230;
-      --border-2:     #2c2c3a;
-      --accent:       #bf4060;
-      --accent-h:     #d45070;
-      --accent-dim:   rgba(191,64,96,.12);
-      --accent-dim2:  rgba(191,64,96,.06);
-      --yes:          #3a8f62;
-      --yes-bg:       rgba(58,143,98,.13);
-      --yes-text:     #68d498;
-      --maybe:        #c07330;
-      --maybe-bg:     rgba(192,115,48,.13);
-      --maybe-text:   #f0a84e;
-      --text:         #edeae6;
-      --text-2:       #9490a0;
-      --text-3:       #55526a;
-      --r:            14px;
-      --r-sm:         8px;
-      --r-xs:         6px;
-      --ff-display:   'Cormorant Garamond', Georgia, serif;
-      --ff-body:      'Jost', system-ui, sans-serif;
-      --max:          600px;
-      --transition:   .15s ease;
+      --bg:          #08080b;
+      --surface:     #101014;
+      --surface-2:   #17171d;
+      --surface-3:   #1e1e26;
+      --border:      #222230;
+      --border-2:    #2c2c3a;
+      --accent:      #bf4060;
+      --accent-h:    #d45070;
+      --accent-dim:  rgba(191,64,96,.12);
+      --accent-dim2: rgba(191,64,96,.06);
+      --yes:         #3a8f62;
+      --yes-bg:      rgba(58,143,98,.13);
+      --yes-text:    #68d498;
+      --maybe:       #c07330;
+      --maybe-bg:    rgba(192,115,48,.13);
+      --maybe-text:  #f0a84e;
+      --text:        #edeae6;
+      --text-2:      #9490a0;
+      --text-3:      #55526a;
+      --r:           14px;
+      --r-sm:        8px;
+      --r-xs:        6px;
+      --ff-d:        'Cormorant Garamond', Georgia, serif;
+      --ff-b:        'Jost', system-ui, sans-serif;
+      --max:         600px;
+      --tr:          .15s ease;
     }
-
-    html { }
-
+    html {}
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--ff-body);
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 1.6;
+      background: var(--bg); color: var(--text);
+      font-family: var(--ff-b); font-size: 16px;
+      font-weight: 400; line-height: 1.6;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
-
-    /* Grain overlay for depth */
     body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
+      content: ''; position: fixed; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: .03;
-      pointer-events: none;
-      z-index: 9999;
+      opacity: .03; pointer-events: none; z-index: 9999;
     }
-
     #app { min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* ── NAV ── */
+    /* NAV */
     .nav {
       position: sticky; top: 0; z-index: 200;
-      background: rgba(8,8,11,.88);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(8,8,11,.9); backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
-      height: 56px;
-      display: flex; align-items: center;
-      padding: 0 20px;
-      gap: 16px;
+      height: 56px; display: flex; align-items: center;
+      padding: 0 20px; gap: 16px;
     }
-    .nav-logo {
-      font-family: var(--ff-display);
-      font-size: 21px; font-style: italic; font-weight: 400;
-      color: var(--text); text-decoration: none;
-      letter-spacing: .01em; white-space: nowrap;
-      flex: 1;
-    }
+    .nav-logo { font-family: var(--ff-d); font-size: 21px; font-style: italic; font-weight: 400; color: var(--text); text-decoration: none; flex: 1; }
     .nav-logo em { font-style: italic; color: var(--accent); }
     .nav-links { display: flex; align-items: center; gap: 20px; list-style: none; }
-    .nav-links a {
-      font-size: 13px; font-weight: 400;
-      color: var(--text-2); text-decoration: none;
-      letter-spacing: .03em; transition: color var(--transition);
-    }
+    .nav-links a { font-size: 13px; color: var(--text-2); text-decoration: none; transition: color var(--tr); }
     .nav-links a:hover { color: var(--text); }
 
-    /* ── LAYOUT ── */
-    .page {
-      flex: 1;
-      max-width: var(--max);
-      margin: 0 auto; width: 100%;
-      padding: 0 20px 100px;
-    }
+    /* LAYOUT */
+    .page { flex: 1; max-width: var(--max); margin: 0 auto; width: 100%; padding: 0 20px 100px; }
 
-    /* ── TYPE ── */
-    .display {
-      font-family: var(--ff-display);
-      font-size: clamp(38px, 9vw, 60px);
-      font-weight: 300; line-height: 1.08;
-      letter-spacing: -.015em;
-    }
+    /* TYPE */
+    .display { font-family: var(--ff-d); font-size: clamp(38px,9vw,60px); font-weight: 300; line-height: 1.08; letter-spacing: -.015em; }
     .display em { font-style: italic; color: var(--accent); }
-    .heading {
-      font-family: var(--ff-display);
-      font-size: clamp(24px, 5vw, 34px);
-      font-weight: 400; line-height: 1.2;
-    }
-    .label {
-      font-size: 11px; font-weight: 500;
-      letter-spacing: .1em; text-transform: uppercase;
-      color: var(--text-3);
-    }
+    .heading { font-family: var(--ff-d); font-size: clamp(24px,5vw,34px); font-weight: 400; line-height: 1.2; }
+    .label { font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); }
     .label.accent { color: var(--accent); }
-    .body-sm {
-      font-size: 14px; font-weight: 300;
-      color: var(--text-2); line-height: 1.7;
-    }
+    .body-sm { font-size: 14px; font-weight: 300; color: var(--text-2); line-height: 1.7; }
 
-    /* ── BUTTONS ── */
+    /* BUTTONS */
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
       gap: 8px; height: 48px; padding: 0 24px;
-      border-radius: var(--r-sm);
-      border: 1px solid transparent;
-      font-family: var(--ff-body);
-      font-size: 14px; font-weight: 500;
-      letter-spacing: .04em;
-      text-decoration: none; cursor: pointer;
-      transition: all var(--transition);
-      white-space: nowrap;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
+      border-radius: var(--r-sm); border: 1px solid transparent;
+      font-family: var(--ff-b); font-size: 14px; font-weight: 500;
+      letter-spacing: .04em; text-decoration: none; cursor: pointer;
+      transition: all var(--tr); white-space: nowrap;
+      -webkit-tap-highlight-color: transparent; user-select: none; touch-action: manipulation;
     }
     .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
     .btn-primary:hover:not(:disabled) { background: var(--accent-h); border-color: var(--accent-h); }
@@ -156,368 +100,194 @@
     .btn-full { width: 100%; }
     .btn-sm { height: 38px; padding: 0 16px; font-size: 13px; }
 
-    /* ── ANSWER BUTTONS (native radio + label — browser drives the visual) ── */
-    .answer-group {
-      display: grid; grid-template-columns: 1fr 1fr 1fr;
-      gap: 6px; margin-top: 10px;
-    }
-    .answer-input {
-      position: absolute;
-      width: 1px; height: 1px;
-      opacity: 0; margin: 0;
-      pointer-events: none;
-    }
+    /* ANSWER BUTTONS — native radio + label */
+    .answer-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 10px; }
+    .answer-input { position: absolute; width: 1px; height: 1px; opacity: 0; margin: 0; pointer-events: none; }
     .answer-btn {
       display: flex; align-items: center; justify-content: center;
-      height: 44px;
-      border-radius: var(--r-xs);
-      border: 1px solid var(--border);
-      background: var(--surface-2);
-      color: var(--text-3);
-      font-family: var(--ff-body);
-      font-size: 12px; font-weight: 500;
-      letter-spacing: .08em; text-transform: uppercase;
-      cursor: pointer;
-      transition: transform .1s ease, background .12s ease, border-color .12s ease, color .12s ease, box-shadow .12s ease;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      user-select: none;
-      touch-action: manipulation;
+      height: 44px; border-radius: var(--r-xs);
+      border: 1px solid var(--border); background: var(--surface-2);
+      color: var(--text-3); font-family: var(--ff-b);
+      font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+      cursor: pointer; transition: transform .1s ease, background .12s ease, border-color .12s ease, color .12s ease, box-shadow .12s ease;
+      -webkit-tap-highlight-color: transparent; user-select: none; touch-action: manipulation;
     }
     .answer-btn:active { transform: scale(.95); }
     .answer-btn:hover { border-color: var(--border-2); color: var(--text-2); }
+    .answer-input:checked + .ans-Y { background: var(--yes-bg); border-color: var(--yes); color: var(--yes-text); box-shadow: 0 0 0 1.5px var(--yes); }
+    .answer-input:checked + .ans-M { background: var(--maybe-bg); border-color: var(--maybe); color: var(--maybe-text); box-shadow: 0 0 0 1.5px var(--maybe); }
+    .answer-input:checked + .ans-N { background: rgba(255,255,255,.05); border-color: var(--text-2); color: var(--text); box-shadow: 0 0 0 1.5px var(--text-3); }
+    .answer-input:focus-visible + .answer-btn { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-    /* :checked drives the highlight + box — instant, native, no JS timing */
-    .answer-input:checked + .ans-Y {
-      background: var(--yes-bg); border-color: var(--yes);
-      color: var(--yes-text); box-shadow: 0 0 0 1.5px var(--yes);
-    }
-    .answer-input:checked + .ans-M {
-      background: var(--maybe-bg); border-color: var(--maybe);
-      color: var(--maybe-text); box-shadow: 0 0 0 1.5px var(--maybe);
-    }
-    .answer-input:checked + .ans-N {
-      background: rgba(255,255,255,.05); border-color: var(--text-2);
-      color: var(--text); box-shadow: 0 0 0 1.5px var(--text-3);
-    }
-    .answer-input:focus-visible + .answer-btn {
-      outline: 2px solid var(--accent); outline-offset: 2px;
-    }
-
-    /* ── CARDS ── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 24px;
-    }
+    /* CARDS */
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; }
     .card-sm { padding: 16px 20px; }
     .card-accent { border-color: rgba(191,64,96,.25); background: var(--accent-dim2); }
+    .card-yes { border-color: rgba(58,143,98,.25); background: rgba(58,143,98,.05); }
 
-    /* ── HOME ── */
-    .hero {
-      padding: 64px 0 48px;
-      text-align: center;
-    }
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 5px 14px;
-      background: var(--accent-dim); border: 1px solid rgba(191,64,96,.2);
-      border-radius: 999px;
-      font-size: 11px; font-weight: 500;
-      letter-spacing: .1em; text-transform: uppercase;
-      color: var(--accent); margin-bottom: 28px;
-    }
-    .hero-body {
-      font-size: 16px; font-weight: 300;
-      color: var(--text-2); line-height: 1.7;
-      max-width: 440px; margin: 0 auto;
-    }
-    .hero-ctas {
-      display: flex; flex-direction: column; gap: 10px;
-      max-width: 300px; margin: 32px auto 0;
-    }
-
-    /* Steps */
+    /* HOME */
+    .hero { padding: 64px 0 48px; text-align: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; background: var(--accent-dim); border: 1px solid rgba(191,64,96,.2); border-radius: 999px; font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 28px; }
+    .hero-body { font-size: 16px; font-weight: 300; color: var(--text-2); line-height: 1.7; max-width: 440px; margin: 0 auto; }
+    .hero-ctas { display: flex; flex-direction: column; gap: 10px; max-width: 300px; margin: 32px auto 0; }
     .steps { display: flex; flex-direction: column; gap: 0; margin-top: 24px; }
     .step { display: flex; gap: 18px; padding-bottom: 28px; position: relative; }
     .step:last-child { padding-bottom: 0; }
-    .step-line {
-      position: absolute; left: 15px; top: 34px; bottom: 0;
-      width: 1px; background: var(--border);
-    }
+    .step-line { position: absolute; left: 15px; top: 34px; bottom: 0; width: 1px; background: var(--border); }
     .step:last-child .step-line { display: none; }
-    .step-num {
-      width: 32px; height: 32px; min-width: 32px; border-radius: 50%;
-      background: var(--surface-2); border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 500; color: var(--accent);
-      position: relative; z-index: 1;
-    }
+    .step-num { width: 32px; height: 32px; min-width: 32px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: var(--accent); position: relative; z-index: 1; }
     .step-content { padding-top: 4px; }
     .step-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
     .step-desc { font-size: 14px; color: var(--text-2); font-weight: 300; line-height: 1.55; }
-
-    /* Promise grid */
-    .promise-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 10px; margin-top: 20px;
-    }
-    .promise-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r-sm);
-      padding: 13px 14px;
-      display: flex; align-items: flex-start; gap: 10px;
-    }
-    .promise-dot {
-      width: 6px; height: 6px; min-width: 6px;
-      border-radius: 50%; background: var(--accent);
-      margin-top: 6px;
-    }
+    .promise-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+    .promise-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 13px 14px; display: flex; align-items: flex-start; gap: 10px; }
+    .promise-dot { width: 6px; height: 6px; min-width: 6px; border-radius: 50%; background: var(--accent); margin-top: 6px; }
     .promise-text { font-size: 13px; color: var(--text-2); font-weight: 300; line-height: 1.4; }
-
-    /* Badges */
     .badge-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; }
-    .badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 5px 12px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 999px;
-      font-size: 12px; color: var(--text-2); font-weight: 400;
-    }
+    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; font-size: 12px; color: var(--text-2); }
 
-    /* ── SURVEY ── */
+    /* SESSION CODE DISPLAY */
+    .session-code {
+      font-family: 'SF Mono','Fira Code',monospace;
+      font-size: clamp(36px,10vw,56px); font-weight: 600;
+      letter-spacing: .25em; color: var(--text);
+      text-align: center; padding: 20px 0 8px;
+    }
+    .session-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; background: var(--accent-dim);
+      border: 1px solid rgba(191,64,96,.2); border-radius: 999px;
+      font-size: 11px; font-weight: 500; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--accent);
+    }
+    .code-input {
+      width: 100%; height: 60px; text-align: center;
+      background: var(--surface-2); border: 1px solid var(--border-2);
+      border-radius: var(--r-sm); color: var(--text);
+      font-family: 'SF Mono','Fira Code',monospace;
+      font-size: 28px; font-weight: 600; letter-spacing: .2em;
+      text-transform: uppercase; outline: none;
+      transition: border-color var(--tr);
+    }
+    .code-input:focus { border-color: var(--accent); }
+    .code-input::placeholder { color: var(--text-3); letter-spacing: .15em; font-size: 22px; }
+
+    /* SURVEY */
     .survey-header {
       position: sticky; top: 56px; z-index: 100;
-      background: rgba(8,8,11,.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(8,8,11,.92); backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      margin: 0 -20px;
-      padding: 12px 20px;
+      margin: 0 -20px; padding: 12px 20px;
     }
-    .survey-meta {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 8px;
-    }
-    .progress-bar {
-      height: 2px; background: var(--border);
-      border-radius: 999px; overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%; background: var(--accent);
-      border-radius: 999px; transition: width .4s ease;
-    }
-    .section-intro { padding: 32px 0 20px; }
-    .section-num {
-      font-size: 11px; font-weight: 500;
-      letter-spacing: .1em; text-transform: uppercase;
-      color: var(--accent); margin-bottom: 8px;
-    }
-    .section-title {
-      font-family: var(--ff-display);
-      font-size: 30px; font-weight: 400; color: var(--text);
-      margin-bottom: 5px;
-    }
-    .section-sub { font-size: 14px; font-weight: 300; color: var(--text-2); }
-    .questions-list { display: flex; flex-direction: column; }
-    .question-item {
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .question-item:last-child { border-bottom: none; }
-    .question-text {
-      font-size: 15px; font-weight: 400; color: var(--text);
-      line-height: 1.4; margin-bottom: 10px;
-    }
-    .survey-nav { display: flex; gap: 10px; margin-top: 28px; }
-    .survey-nav .btn-primary { flex: 1; }
-    .survey-hint {
-      text-align: center; font-size: 12px; color: var(--text-3);
-      margin-top: 10px; padding-bottom: 20px; font-weight: 300;
-    }
-    .survey-hint.ok { color: var(--yes-text); }
-
-    /* Section progress pills */
-    .section-pills {
-      display: flex; gap: 4px; margin-top: 10px;
-    }
-    .section-pill {
-      flex: 1; height: 3px; border-radius: 999px;
-      background: var(--border); transition: background .3s;
-    }
+    .survey-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .progress-bar { height: 2px; background: var(--border); border-radius: 999px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 999px; transition: width .4s ease; }
+    .section-pills { display: flex; gap: 4px; margin-top: 10px; }
+    .section-pill { flex: 1; height: 3px; border-radius: 999px; background: var(--border); transition: background .3s; }
     .section-pill.done { background: var(--yes); }
     .section-pill.active { background: var(--accent); }
+    .section-intro { padding: 32px 0 20px; }
+    .section-num { font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+    .section-title { font-family: var(--ff-d); font-size: 30px; font-weight: 400; color: var(--text); margin-bottom: 5px; }
+    .section-sub { font-size: 14px; font-weight: 300; color: var(--text-2); }
+    .questions-list { display: flex; flex-direction: column; }
+    .question-item { padding: 16px 0; border-bottom: 1px solid var(--border); }
+    .question-item:last-child { border-bottom: none; }
+    .question-text { font-size: 15px; font-weight: 400; color: var(--text); line-height: 1.4; margin-bottom: 10px; }
+    .survey-nav { display: flex; gap: 10px; margin-top: 28px; }
+    .survey-nav .btn-primary { flex: 1; }
+    .survey-hint { text-align: center; font-size: 12px; color: var(--text-3); margin-top: 10px; padding-bottom: 20px; font-weight: 300; }
+    .survey-hint.ok { color: var(--yes-text); }
 
-    /* ── SHARE PAGE ── */
-    .share-link-box {
-      background: var(--surface-3);
-      border: 1px solid var(--border-2);
-      border-radius: var(--r-sm);
-      padding: 14px 16px;
-      font-size: 13px; color: var(--text-2);
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      word-break: break-all; line-height: 1.6;
-      margin: 14px 0;
-      user-select: all;
-    }
-    .copy-confirm {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 12px; color: var(--yes-text); font-weight: 500;
-      opacity: 0; transition: opacity .2s; margin-left: 8px;
-    }
+    /* SHARE */
+    .share-link-box { background: var(--surface-3); border: 1px solid var(--border-2); border-radius: var(--r-sm); padding: 14px 16px; font-size: 13px; color: var(--text-2); font-family: 'SF Mono','Fira Code',monospace; word-break: break-all; line-height: 1.6; margin: 14px 0; user-select: all; }
+    .copy-confirm { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--yes-text); font-weight: 500; opacity: 0; transition: opacity .2s; margin-left: 8px; }
     .copy-confirm.show { opacity: 1; }
 
-    /* ── AGGREGATE ── */
-    .agg-textarea {
-      width: 100%; min-height: 140px;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: var(--r-sm);
-      padding: 14px 16px;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 13px; color: var(--text);
-      line-height: 1.6; resize: vertical; outline: none;
-      transition: border-color var(--transition);
-    }
+    /* AGGREGATE */
+    .agg-textarea { width: 100%; min-height: 140px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 14px 16px; font-family: 'SF Mono','Fira Code',monospace; font-size: 13px; color: var(--text); line-height: 1.6; resize: vertical; outline: none; transition: border-color var(--tr); }
     .agg-textarea:focus { border-color: var(--border-2); }
     .agg-textarea::placeholder { color: var(--text-3); }
     .agg-error { font-size: 13px; color: var(--accent); font-weight: 400; margin-top: 8px; display: none; }
     .agg-error.show { display: block; }
 
-    /* ── RESULTS ── */
-    .results-meta {
-      display: flex; align-items: center; gap: 10px;
-      flex-wrap: wrap; margin-top: 6px;
-    }
-    .meta-pill {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 3px 10px;
-      background: var(--surface-2); border: 1px solid var(--border);
-      border-radius: 999px;
-      font-size: 12px; color: var(--text-2);
-    }
+    /* RESULTS */
+    .results-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+    .meta-pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; font-size: 12px; color: var(--text-2); }
     .meta-dot { width: 6px; height: 6px; border-radius: 50%; }
     .meta-dot.yes { background: var(--yes); }
     .meta-dot.maybe { background: var(--maybe); }
-
-    .results-section { margin: 36px 0; }
-    .results-section-head {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
-    }
-    .results-section-title {
-      font-family: var(--ff-display);
-      font-size: 20px; font-weight: 400; color: var(--text);
-    }
-    .result-count {
-      font-size: 11px; font-weight: 500; color: var(--text-3);
-      background: var(--surface-2); border: 1px solid var(--border);
-      border-radius: 999px; padding: 2px 9px;
-    }
+    .results-section { margin: 32px 0; }
+    .results-section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .results-section-title { font-family: var(--ff-d); font-size: 20px; font-weight: 400; color: var(--text); }
+    .result-count { font-size: 11px; font-weight: 500; color: var(--text-3); background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 2px 9px; }
     .results-chips { display: flex; flex-direction: column; gap: 7px; }
-    .result-chip {
-      display: flex; align-items: center; gap: 12px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--r-sm); padding: 12px 14px;
-      transition: border-color .15s;
-    }
+    .result-chip { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 12px 14px; }
     .result-chip.r-yes { border-color: rgba(58,143,98,.25); background: rgba(58,143,98,.05); }
     .result-chip.r-maybe { border-color: rgba(192,115,48,.25); background: rgba(192,115,48,.05); }
     .chip-dot { width: 7px; height: 7px; min-width: 7px; border-radius: 50%; }
     .r-yes .chip-dot { background: var(--yes); }
     .r-maybe .chip-dot { background: var(--maybe); }
     .chip-text { font-size: 14px; color: var(--text); font-weight: 400; line-height: 1.3; }
-    .chip-badge {
-      margin-left: auto; font-size: 10px; font-weight: 500;
-      letter-spacing: .06em; text-transform: uppercase;
-      padding: 3px 8px; border-radius: 4px; white-space: nowrap;
-    }
+    .chip-badge { margin-left: auto; font-size: 10px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
     .r-yes .chip-badge { background: var(--yes-bg); color: var(--yes-text); }
     .r-maybe .chip-badge { background: var(--maybe-bg); color: var(--maybe-text); }
 
-    /* ── PROSE (privacy/about) ── */
-    .prose h2 {
-      font-family: var(--ff-display);
-      font-size: 22px; font-weight: 400; color: var(--text);
-      margin: 36px 0 12px;
-    }
+    /* SESSION WAITING */
+    .participant-count { font-family: var(--ff-d); font-size: 48px; font-weight: 300; color: var(--text); line-height: 1; }
+    .participant-label { font-size: 13px; color: var(--text-2); font-weight: 300; margin-top: 4px; }
+    .spinner { width: 28px; height: 28px; border: 2px solid var(--border-2); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* SAFETY NOTE */
+    .safety-note { background: rgba(192,115,48,.08); border: 1px solid rgba(192,115,48,.2); border-radius: var(--r-sm); padding: 14px 16px; margin: 24px 0; }
+    .safety-note p { font-size: 13px; color: var(--text-2); font-weight: 300; line-height: 1.65; }
+    .safety-note strong { color: var(--maybe-text); font-weight: 500; }
+
+    /* PROSE */
+    .prose h2 { font-family: var(--ff-d); font-size: 22px; font-weight: 400; color: var(--text); margin: 36px 0 12px; }
     .prose h2:first-child { margin-top: 0; }
-    .prose p {
-      font-size: 15px; font-weight: 300; color: var(--text-2);
-      line-height: 1.8; margin-bottom: 14px;
-    }
+    .prose p { font-size: 15px; font-weight: 300; color: var(--text-2); line-height: 1.8; margin-bottom: 14px; }
     .prose strong { font-weight: 500; color: var(--text); }
     .prose ul { list-style: none; display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
-    .prose ul li {
-      font-size: 15px; font-weight: 300; color: var(--text-2);
-      line-height: 1.6; padding-left: 18px; position: relative;
-    }
+    .prose ul li { font-size: 15px; font-weight: 300; color: var(--text-2); line-height: 1.6; padding-left: 18px; position: relative; }
     .prose ul li::before { content: '—'; position: absolute; left: 0; color: var(--accent); }
-    .prose a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(191,64,96,.3); transition: border-color var(--transition); }
+    .prose a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(191,64,96,.3); }
     .prose a:hover { border-color: var(--accent); }
 
-    /* ── FOOTER ── */
-    .footer {
-      border-top: 1px solid var(--border);
-      padding: 22px 20px; text-align: center;
-      max-width: var(--max); margin: 0 auto; width: 100%;
-    }
+    /* FOOTER */
+    .footer { border-top: 1px solid var(--border); padding: 22px 20px; text-align: center; max-width: var(--max); margin: 0 auto; width: 100%; }
     .footer p { font-size: 12px; color: var(--text-3); font-weight: 300; }
-    .footer a { color: var(--text-2); text-decoration: none; transition: color var(--transition); }
+    .footer a { color: var(--text-2); text-decoration: none; }
     .footer a:hover { color: var(--text); }
 
-    /* ── UTILS ── */
+    /* UTILS */
     .divider { height: 1px; background: var(--border); margin: 36px 0; }
     .t-center { text-align: center; }
     .t-accent { color: var(--accent); }
-    .t-muted { color: var(--text-2); }
-    .mt-2 { margin-top: 8px; }
-    .mt-3 { margin-top: 12px; }
-    .mt-4 { margin-top: 16px; }
-    .mt-6 { margin-top: 24px; }
-    .mt-8 { margin-top: 32px; }
-    .mt-10 { margin-top: 40px; }
-    .mb-3 { margin-bottom: 12px; }
-    .mb-4 { margin-bottom: 16px; }
     .inline-link { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(191,64,96,.3); }
-    .inline-link:hover { border-color: var(--accent); }
+    .mt-2{margin-top:8px} .mt-3{margin-top:12px} .mt-4{margin-top:16px} .mt-6{margin-top:24px} .mt-8{margin-top:32px} .mt-10{margin-top:40px}
+    .mb-3{margin-bottom:12px} .mb-4{margin-bottom:16px}
 
-    /* ── ANIMATIONS ── */
-    @keyframes fadeSlide {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    /* ANIMATIONS */
+    @keyframes fadeSlide { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
     .fade-in { animation: fadeSlide .25s ease forwards; }
-
-    @keyframes popIn {
-      0%   { transform: scale(.94); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
+    @keyframes popIn { 0%{transform:scale(.94);opacity:0} 100%{transform:scale(1);opacity:1} }
     .pop-in { animation: popIn .2s cubic-bezier(.22,1,.36,1) forwards; }
 
-    /* ── RESPONSIVE ── */
-    @media (min-width: 480px) {
-      .hero-ctas { flex-direction: row; max-width: 340px; }
-    }
-    @media (max-width: 360px) {
-      .nav-links li:first-child { display: none; }
-      .promise-grid { grid-template-columns: 1fr; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .fade-in, .pop-in { animation: none; }
-    }
+    /* RESPONSIVE */
+    @media (min-width:480px) { .hero-ctas { flex-direction: row; max-width: 360px; } }
+    @media (max-width:360px) { .nav-links li:first-child { display: none; } .promise-grid { grid-template-columns: 1fr; } }
+    @media (prefers-reduced-motion:reduce) { .fade-in, .pop-in { animation: none; } }
   </style>
 </head>
 <body>
 <div id="app"></div>
-
 <script>
 'use strict';
 
 // ═══════════════════════════════════════════════════════
-//  DATA
+//  DATA — 46 questions across 6 sections
 // ═══════════════════════════════════════════════════════
 
 const SECTIONS = [
@@ -543,10 +313,10 @@ const SECTIONS = [
     title: 'Chemistry & Connection',
     subtitle: 'How you meet and decide to play',
     questions: [
-      'Playing on or after first meeting (no prior date needed)',
-      'Social connection required first (friends-before-play)',
+      'Playing on first meeting (no prior date needed)',
+      'Comfortable playing without getting to know each other first',
       'Spontaneous connections at events or clubs',
-      'Everyone must be mutually enthusiastic before play begins',
+      'Open to playing with people you already know socially',
       'Open to ongoing connections with the same people',
       'One partner playing independently (solo play dates)',
     ]
@@ -585,14 +355,14 @@ const SECTIONS = [
   },
   {
     id: 'health',
-    title: 'Health & Safety',
-    subtitle: 'Non-negotiables and requirements',
+    title: 'Safer Sex & Substances',
+    subtitle: 'If not shown, default to the safer choice',
     questions: [
-      'Barriers required for penetrative sex (always)',
-      'Barriers required for oral sex',
-      'Comfortable with barrier-free play (fluid bonded / tested)',
-      'Recent STI testing required before play',
-      'Sober or low-intoxication play only',
+      'Barrier-free penetrative sex (no condoms)',
+      'Barrier-free oral sex',
+      'Playing without exchanging recent STI test results',
+      'Alcohol as part of play',
+      'Recreational substances as part of play',
     ]
   },
   {
@@ -605,13 +375,12 @@ const SECTIONS = [
       'Traveling out of town to play',
       'Sharing details with partners afterward',
       'Staying friends / social connection outside of play',
-      'Privacy required — no social media mentions',
-      'Verbal check-ins during play preferred',
+      'Comfortable being mentioned or tagged on social media',
+      'Comfortable playing without verbal check-ins',
     ]
   }
 ];
 
-// Flatten questions with global indices
 let _gi = 0;
 const QUESTIONS = SECTIONS.flatMap((s, si) =>
   s.questions.map((text, li) => ({ gi: _gi++, si, li, text }))
@@ -622,7 +391,8 @@ const TOTAL = QUESTIONS.length; // 46
 //  STATE
 // ═══════════════════════════════════════════════════════
 
-const answers = {}; // gi -> 'Y' | 'M' | 'N'
+const answers = {};
+let pollInterval = null;
 
 // ═══════════════════════════════════════════════════════
 //  ENCODING
@@ -631,12 +401,12 @@ const answers = {}; // gi -> 'Y' | 'M' | 'N'
 function encode(answersObj) {
   let s = '';
   for (let i = 0; i < TOTAL; i++) s += answersObj[i] || 'U';
-  return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+  return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
 }
 
 function decode(enc) {
   try {
-    const b64 = enc.replace(/-/g, '+').replace(/_/g, '/');
+    const b64 = enc.replace(/-/g,'+').replace(/_/g,'/');
     const pad = b64 + '=='.slice(0, (4 - b64.length % 4) % 4);
     const s = atob(pad);
     const r = {};
@@ -656,8 +426,7 @@ function computeResults(encList) {
     QUESTIONS.filter(q => q.si === si).forEach(q => {
       const responses = all.map(a => a[q.gi] || null);
       if (responses.some(r => !r || r === 'N')) return;
-      const unanimous = responses.every(r => r === 'Y');
-      items.push({ text: q.text, unanimous });
+      items.push({ text: q.text, unanimous: responses.every(r => r === 'Y') });
     });
     if (items.length) out.push({ section, items });
   });
@@ -665,38 +434,35 @@ function computeResults(encList) {
 }
 
 // ═══════════════════════════════════════════════════════
-//  ROUTER
+//  ROUTING
 // ═══════════════════════════════════════════════════════
 
 function navigate(path) { window.location.hash = path; }
 
-function getRoute() {
+function render() {
+  stopPolling();
   const h = window.location.hash.slice(1) || '/';
   const parts = h.split('/').filter(Boolean);
-  return { page: parts[0] || '', rest: parts.slice(1) };
-}
+  const page  = parts[0] || '';
+  const rest  = parts.slice(1);
 
-// ═══════════════════════════════════════════════════════
-//  RENDER ENGINE
-// ═══════════════════════════════════════════════════════
+  // Remove noindex from previous results page
+  document.querySelectorAll('meta[name="robots"]').forEach(m => m.remove());
 
-function render() {
-  const { page, rest } = getRoute();
   const app = document.getElementById('app');
-
-  // Remove robots noindex when leaving results
-  const noindex = document.querySelector('meta[name="robots"][content*="noindex"]');
-  if (noindex) noindex.remove();
-
   let html;
+
   switch (page) {
-    case 'survey':    html = pageSurvey(parseInt(rest[0]) || 0); break;
-    case 'share':     html = pageShare(rest[0]); break;
-    case 'aggregate': html = pageAggregate(); break;
-    case 'results':   html = pageResults(rest[0]); break;
-    case 'privacy':   html = pagePrivacy(); break;
-    case 'about':     html = pageAbout(); break;
-    default:          html = pageHome();
+    case 'create':   html = pageCreate();                          break;
+    case 'join':     html = rest[0] ? pageJoinStart(rest[0]) : pageJoin(); break;
+    case 'session':  html = pageSession(rest[0]);                  break;
+    case 'survey':   html = pageSurvey(parseInt(rest[0])||0, rest[1]||null); break;
+    case 'share':    html = pageShare(rest[0]);                    break;
+    case 'aggregate':html = pageAggregate();                       break;
+    case 'results':  html = pageResults(rest[0]);                  break;
+    case 'privacy':  html = pagePrivacy();                         break;
+    case 'about':    html = pageAbout();                           break;
+    default:         html = pageHome();
   }
 
   app.innerHTML = html;
@@ -704,14 +470,17 @@ function render() {
   void app.offsetWidth;
   app.classList.add('fade-in');
 
-  // Force scroll to top — multiple methods for cross-browser reliability
   window.scrollTo({ top: 0, behavior: 'instant' });
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
+
+  // Post-render hooks
+  if (page === 'create')  initCreate();
+  if (page === 'session') initSession(rest[0]);
 }
 
 // ═══════════════════════════════════════════════════════
-//  SHARED PARTIALS
+//  PARTIALS
 // ═══════════════════════════════════════════════════════
 
 function Nav() {
@@ -735,6 +504,48 @@ function Footer() {
   </footer>`;
 }
 
+function SafetyNote() {
+  return `<div class="safety-note">
+    <p><strong>A note on Safer Sex &amp; Substances:</strong> Items from that section only appear here if everyone said Yes or Maybe to the more permissive option. If they're not shown, default to the safer choice — use protection, exchange recent test results, and keep play sober. This tool starts the conversation; it doesn't replace it.</p>
+  </div>`;
+}
+
+function ResultsHTML(results, participantCount) {
+  const total = results.reduce((s,r) => s + r.items.length, 0);
+  if (!results.length) return `
+    <div class="t-center mt-10">
+      <h2 class="heading">No mutual matches yet</h2>
+      <p class="body-sm mt-4" style="max-width:340px;margin:12px auto 0;">
+        There aren't any items that all ${participantCount} participant${participantCount!==1?'s':''} agreed on. More submissions may change that.
+      </p>
+    </div>`;
+
+  return `
+    <div style="padding-top:16px;">
+      <p class="label accent">${participantCount} participant${participantCount!==1?'s':''} · ${total} match${total!==1?'es':''}</p>
+      <div class="results-meta mt-3">
+        <span class="meta-pill"><span class="meta-dot yes"></span>All said Yes</span>
+        <span class="meta-pill"><span class="meta-dot maybe"></span>Includes Maybes</span>
+      </div>
+    </div>
+    ${SafetyNote()}
+    ${results.map(({section, items}) => `
+      <div class="results-section">
+        <div class="results-section-head">
+          <span class="results-section-title">${section.title}</span>
+          <span class="result-count">${items.length}</span>
+        </div>
+        <div class="results-chips">
+          ${items.map(item => `
+            <div class="result-chip ${item.unanimous?'r-yes':'r-maybe'} pop-in">
+              <div class="chip-dot"></div>
+              <span class="chip-text">${item.text}</span>
+              <span class="chip-badge">${item.unanimous?'Yes':'Maybe'}</span>
+            </div>`).join('')}
+        </div>
+      </div>`).join('')}`;
+}
+
 // ═══════════════════════════════════════════════════════
 //  HOME
 // ═══════════════════════════════════════════════════════
@@ -745,40 +556,40 @@ function pageHome() {
     <section class="hero fade-in">
       <div class="eyebrow">Private · Anonymous · No accounts</div>
       <h1 class="display">Find your<br><em>common ground</em></h1>
-      <p class="hero-body mt-4">
-        A private tool for honest conversations about what you're open to.
-        No accounts. No emails. No data stored — ever.
-      </p>
+      <p class="hero-body mt-4">A private tool for honest conversations about what you're open to. No accounts. No emails. No data stored.</p>
       <div class="hero-ctas">
-        <a href="#/survey/0" class="btn btn-primary btn-full">Start the Survey</a>
-        <a href="#/aggregate" class="btn btn-ghost btn-full">Combine Results</a>
+        <a href="#/create" class="btn btn-primary btn-full">Create a Session</a>
+        <a href="#/join" class="btn btn-ghost btn-full">Join a Session</a>
       </div>
+      <p class="mt-6" style="font-size:13px;color:var(--text-3);">
+        Or <a href="#/aggregate" class="inline-link">combine links manually</a> without a session
+      </p>
     </section>
 
     <section>
-      <p class="label">How it works</p>
+      <p class="label">How sessions work</p>
       <div class="steps">
         <div class="step">
           <div class="step-line"></div>
           <div class="step-num">1</div>
           <div class="step-content">
-            <div class="step-title">Each person takes the survey privately</div>
-            <div class="step-desc">46 questions across 6 topics. Your answers stay in your browser — never sent to any server.</div>
+            <div class="step-title">Create a session, get a code</div>
+            <div class="step-desc">You get a short 6-character code like <strong style="color:var(--text);font-family:monospace">K7M2X9</strong>. Share it with your group via text, Telegram, or however you communicate.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-line"></div>
           <div class="step-num">2</div>
           <div class="step-content">
-            <div class="step-title">Share your unique link with the group</div>
-            <div class="step-desc">You get an encoded link containing your answers. Share it via text, Telegram, Signal — whatever works.</div>
+            <div class="step-title">Everyone takes the survey privately</div>
+            <div class="step-desc">Each person opens the session link and answers 46 questions on their own device. Answers go straight to the session — no copying links.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-content">
-            <div class="step-title">See only what everyone agreed on</div>
-            <div class="step-desc">Paste all links to see mutual yes and maybe answers. No's are completely invisible — no one knows who said no to what.</div>
+            <div class="step-title">Results appear automatically</div>
+            <div class="step-desc">The session page shows live results as people submit. Only mutual yes and maybe answers appear. No's are completely invisible.</div>
           </div>
         </div>
       </div>
@@ -789,14 +600,7 @@ function pageHome() {
     <section>
       <p class="label">Our privacy promise</p>
       <div class="promise-grid">
-        ${[
-          'No accounts or sign-up required',
-          'No emails collected — ever',
-          'No cookies or tracking pixels',
-          'Answers exist only in your URL',
-          'Open source — verify the code',
-          'No\'s are never shown to anyone',
-        ].map(t => `<div class="promise-item"><div class="promise-dot"></div><span class="promise-text">${t}</span></div>`).join('')}
+        ${['No accounts or emails — ever','No cookies or tracking pixels','Session data is anonymous encoded strings','Sessions auto-delete after 48 hours','No\'s are never shown to anyone','Open source — verify everything'].map(t => `<div class="promise-item"><div class="promise-dot"></div><span class="promise-text">${t}</span></div>`).join('')}
       </div>
       <p class="t-center mt-4"><a href="#/privacy" class="inline-link">Read the full privacy policy →</a></p>
     </section>
@@ -807,14 +611,11 @@ function pageHome() {
       <div class="badge-row">
         <span class="badge">Open Source</span>
         <span class="badge">MIT License</span>
-        <span class="badge">Zero Data</span>
+        <span class="badge">Zero Identity Data</span>
         <span class="badge">46 Questions</span>
       </div>
-      <p class="body-sm mt-4" style="max-width:380px;margin-left:auto;margin-right:auto;">
-        Built with the lifestyle community. Useful for any couple or group navigating honest conversations about intimacy and shared preferences.
-      </p>
       <div class="mt-6">
-        <a href="#/survey/0" class="btn btn-primary">Start the Survey →</a>
+        <a href="#/create" class="btn btn-primary">Create a Session →</a>
       </div>
     </section>
   </main>
@@ -822,38 +623,227 @@ function pageHome() {
 }
 
 // ═══════════════════════════════════════════════════════
+//  CREATE SESSION
+// ═══════════════════════════════════════════════════════
+
+function pageCreate() {
+  return `${Nav()}
+  <main class="page">
+    <div style="padding-top:56px; text-align:center;">
+      <p class="label accent">New session</p>
+      <h2 class="heading mt-4">Creating your session…</h2>
+    </div>
+    <div id="create-body" style="margin-top:32px; text-align:center;">
+      <div class="spinner"></div>
+    </div>
+  </main>
+  ${Footer()}`;
+}
+
+function initCreate() {
+  fetch('/api/session/create', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'}
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.error) throw new Error(data.error);
+    const code = data.code;
+    const shareUrl = `${window.location.origin}${window.location.pathname}#/join/${code}`;
+    const el = document.getElementById('create-body');
+    if (!el) return;
+    el.innerHTML = `
+      <div class="card" style="text-align:left;">
+        <p class="label mb-3">Your session code</p>
+        <div class="session-code">${code}</div>
+        <p class="body-sm t-center mt-3">Share this code or the link below with your group</p>
+        <div class="share-link-box mt-4" id="create-url">${shareUrl}</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button class="btn btn-ghost" style="flex:1;" data-a="copy" data-url="${shareUrl}" id="copy-btn">Copy Link</button>
+          <span class="copy-confirm" id="copy-ok">✓ Copied</span>
+        </div>
+      </div>
+      <div class="card card-yes mt-4" style="text-align:left;">
+        <p class="label mb-3">Now take the survey yourself</p>
+        <p class="body-sm" style="margin-bottom:14px;">Your answers will be submitted directly to this session when you finish.</p>
+        <a href="#/join/${code}" class="btn btn-primary btn-full">Start the Survey →</a>
+      </div>
+      <a href="#/session/${code}" class="btn btn-ghost btn-full mt-4" style="font-size:13px;">View Session Results →</a>
+    `;
+  })
+  .catch(err => {
+    const el = document.getElementById('create-body');
+    if (el) el.innerHTML = `<p style="color:var(--accent);font-size:14px;">Could not create session. Check your connection and try again.<br><a href="#/create" class="inline-link">Retry</a></p>`;
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  JOIN SESSION (code entry)
+// ═══════════════════════════════════════════════════════
+
+function pageJoin() {
+  return `${Nav()}
+  <main class="page">
+    <div style="padding-top:48px;">
+      <p class="label accent">Join a session</p>
+      <h2 class="heading mt-4">Enter the session code</h2>
+      <p class="body-sm mt-4">The person who created the session will share a 6-character code with you.</p>
+    </div>
+    <div style="margin-top:28px;">
+      <input type="text" id="code-input" class="code-input" placeholder="A1B2C3"
+        maxlength="6" autocomplete="off" autocapitalize="characters"
+        autocorrect="off" spellcheck="false">
+      <button class="btn btn-primary btn-full mt-4" data-a="join-submit">Join Session →</button>
+      <p class="agg-error" id="join-error"></p>
+    </div>
+    <div class="divider"></div>
+    <p style="font-size:13px;color:var(--text-3);text-align:center;">
+      Creating a new session? <a href="#/create" class="inline-link">Start here</a>
+    </p>
+  </main>
+  ${Footer()}`;
+}
+
+// When navigating directly to #/join/{code}, validate then start survey
+function pageJoinStart(code) {
+  // This page auto-validates and redirects to the survey
+  // Show a brief loading state — initJoinStart handles the redirect
+  return `${Nav()}
+  <main class="page">
+    <div style="padding-top:56px; text-align:center;">
+      <p class="label accent">Joining session ${code.toUpperCase()}</p>
+      <div style="margin-top:24px;"><div class="spinner"></div></div>
+    </div>
+  </main>
+  ${Footer()}`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  SESSION RESULTS
+// ═══════════════════════════════════════════════════════
+
+function pageSession(code) {
+  if (!code) { navigate('/'); return ''; }
+  const shareUrl = `${window.location.origin}${window.location.pathname}#/join/${code}`;
+  return `${Nav()}
+  <main class="page">
+    <div style="padding-top:32px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <span class="session-badge">Session ${code}</span>
+      </div>
+      <h2 class="heading">Live Results</h2>
+      <p class="body-sm mt-3">Results update as people submit. Share the session link to invite others.</p>
+      <div class="share-link-box mt-3" style="font-size:12px;">${shareUrl}</div>
+      <div style="display:flex;gap:8px;margin-bottom:4px;">
+        <button class="btn btn-ghost btn-sm" data-a="copy" data-url="${shareUrl}" id="copy-btn">Copy Invite Link</button>
+        <button class="btn btn-ghost btn-sm" data-a="refresh-session" data-code="${code}">Refresh</button>
+        <span class="copy-confirm" id="copy-ok">✓ Copied</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div id="session-results">
+      <div class="t-center" style="padding:32px 0;">
+        <div class="spinner"></div>
+        <p class="body-sm mt-4">Loading results…</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="card card-sm" style="text-align:center;">
+      <p style="font-size:12px;color:var(--text-3);font-weight:300;line-height:1.7;">
+        Session expires 48 hours after creation.<br>
+        No names. No attribution. All answers are anonymous.
+      </p>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <a href="#/join/${code}" class="btn btn-ghost" style="flex:1;font-size:13px;">Take Survey</a>
+      <a href="#/" class="btn btn-ghost" style="flex:1;font-size:13px;">Home</a>
+    </div>
+  </main>
+  ${Footer()}`;
+}
+
+function stopPolling() {
+  if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+}
+
+function initSession(code) {
+  if (!code) return;
+  fetchSessionResults(code);
+  pollInterval = setInterval(() => fetchSessionResults(code), 10000);
+}
+
+function fetchSessionResults(code) {
+  fetch(`/api/session/${code}`)
+    .then(r => {
+      if (!r.ok) throw new Error('not found');
+      return r.json();
+    })
+    .then(data => {
+      const el = document.getElementById('session-results');
+      if (!el) { stopPolling(); return; }
+
+      const count = data.count;
+      const answers = data.answers || [];
+
+      let html = `
+        <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px;">
+          <span class="participant-count">${count}</span>
+          <span style="font-size:13px;color:var(--text-2);">participant${count!==1?'s':''} submitted</span>
+        </div>`;
+
+      if (count < 2) {
+        html += `<p class="body-sm mt-4">Waiting for at least one more person to submit before results can be shown.</p>
+          <p class="body-sm mt-3">Share the invite link above with your group.</p>`;
+      } else {
+        const results = computeResults(answers);
+        html += ResultsHTML(results, count);
+      }
+
+      el.innerHTML = html;
+    })
+    .catch(() => {
+      const el = document.getElementById('session-results');
+      if (el) el.innerHTML = `<p style="font-size:14px;color:var(--accent);">Session not found or expired.</p><p class="body-sm mt-3"><a href="#/create" class="inline-link">Create a new session</a></p>`;
+      stopPolling();
+    });
+}
+
+// ═══════════════════════════════════════════════════════
 //  SURVEY
 // ═══════════════════════════════════════════════════════
 
-function pageSurvey(si) {
+function pageSurvey(si, sessionCode) {
   si = Math.max(0, Math.min(si, SECTIONS.length - 1));
-  const section = SECTIONS[si];
+  const section   = SECTIONS[si];
   const sectionQs = QUESTIONS.filter(q => q.si === si);
-  const answeredHere = sectionQs.filter(q => answers[q.gi]).length;
-  const sectionDone = answeredHere === sectionQs.length;
+  const answeredHere  = sectionQs.filter(q => answers[q.gi]).length;
+  const sectionDone   = answeredHere === sectionQs.length;
   const totalAnswered = Object.keys(answers).length;
   const pct = Math.round((totalAnswered / TOTAL) * 100);
   const isLast = si === SECTIONS.length - 1;
 
   const pills = SECTIONS.map((_, i) => {
-    const qs = QUESTIONS.filter(q => q.si === i);
-    const done = qs.every(q => answers[q.gi]);
-    const active = i === si;
-    return `<div class="section-pill ${done ? 'done' : active ? 'active' : ''}"></div>`;
+    const done = QUESTIONS.filter(q => q.si === i).every(q => answers[q.gi]);
+    return `<div class="section-pill ${done?'done':i===si?'active':''}"></div>`;
   }).join('');
 
+  const n = s => `q${s.gi}`;
   const qRows = sectionQs.map(q => {
     const cur = answers[q.gi];
-    const n = `q${q.gi}`;
     return `<div class="question-item">
       <div class="question-text">${q.text}</div>
       <div class="answer-group">
-        <input type="radio" class="answer-input" name="${n}" id="${n}-Y" value="Y" data-qi="${q.gi}" ${cur === 'Y' ? 'checked' : ''}>
-        <label class="answer-btn ans-Y" for="${n}-Y">Yes</label>
-        <input type="radio" class="answer-input" name="${n}" id="${n}-M" value="M" data-qi="${q.gi}" ${cur === 'M' ? 'checked' : ''}>
-        <label class="answer-btn ans-M" for="${n}-M">Maybe</label>
-        <input type="radio" class="answer-input" name="${n}" id="${n}-N" value="N" data-qi="${q.gi}" ${cur === 'N' ? 'checked' : ''}>
-        <label class="answer-btn ans-N" for="${n}-N">No</label>
+        <input type="radio" class="answer-input" name="${n(q)}" id="${n(q)}-Y" value="Y" data-qi="${q.gi}" ${cur==='Y'?'checked':''}>
+        <label class="answer-btn ans-Y" for="${n(q)}-Y">Yes</label>
+        <input type="radio" class="answer-input" name="${n(q)}" id="${n(q)}-M" value="M" data-qi="${q.gi}" ${cur==='M'?'checked':''}>
+        <label class="answer-btn ans-M" for="${n(q)}-M">Maybe</label>
+        <input type="radio" class="answer-input" name="${n(q)}" id="${n(q)}-N" value="N" data-qi="${q.gi}" ${cur==='N'?'checked':''}>
+        <label class="answer-btn ans-N" for="${n(q)}-N">No</label>
       </div>
     </div>`;
   }).join('');
@@ -861,17 +851,21 @@ function pageSurvey(si) {
   const remaining = sectionQs.length - answeredHere;
   const hintText = sectionDone
     ? '✓ Section complete — you can continue'
-    : `${remaining} question${remaining !== 1 ? 's' : ''} left in this section`;
+    : `${remaining} question${remaining!==1?'s':''} left in this section`;
+
+  const sc = sessionCode || '';
+  const backHash = sc ? `/survey/${si-1}/${sc}` : `/survey/${si-1}`;
+  const nextHash = sc ? `/survey/${si+1}/${sc}` : `/survey/${si+1}`;
+
+  const sessionIndicator = sc ? `<span class="session-badge" style="margin-left:8px;">Session ${sc}</span>` : '';
 
   return `${Nav()}
   <div class="survey-header">
     <div class="survey-meta">
-      <span class="label">Section ${si + 1} of ${SECTIONS.length}</span>
+      <span class="label">Section ${si+1} of ${SECTIONS.length} ${sessionIndicator}</span>
       <span class="label">${totalAnswered} / ${TOTAL} answered</span>
     </div>
-    <div class="progress-bar">
-      <div class="progress-fill" id="prog" style="width:${pct}%"></div>
-    </div>
+    <div class="progress-bar"><div class="progress-fill" id="prog" style="width:${pct}%"></div></div>
     <div class="section-pills mt-2">${pills}</div>
   </div>
 
@@ -880,28 +874,26 @@ function pageSurvey(si) {
       <div class="section-num">${section.subtitle}</div>
       <h2 class="section-title">${section.title}</h2>
     </div>
-
     <div class="questions-list" id="qlist">${qRows}</div>
-
-    <div class="survey-nav" id="survey-nav" data-si="${si}">
-      ${si > 0 ? `<button class="btn btn-ghost" data-a="back" data-si="${si}">← Back</button>` : ''}
+    <div class="survey-nav" id="survey-nav" data-si="${si}" data-session="${sc}">
+      ${si > 0 ? `<button class="btn btn-ghost" data-a="back" data-hash="${backHash}">← Back</button>` : ''}
       ${isLast
-        ? `<button class="btn btn-primary" id="finish-btn" data-a="finish" data-si="${si}" ${sectionDone ? '' : 'disabled'}>Get My Link</button>`
-        : `<button class="btn btn-primary" id="next-btn" data-a="next" data-si="${si}" ${sectionDone ? '' : 'disabled'}>Continue →</button>`
+        ? `<button class="btn btn-primary" id="finish-btn" data-a="finish" data-si="${si}" data-session="${sc}" ${sectionDone?'':'disabled'}>${sc ? 'Submit to Session →' : 'Get My Link'}</button>`
+        : `<button class="btn btn-primary" id="next-btn" data-a="next" data-hash="${nextHash}" data-si="${si}" ${sectionDone?'':'disabled'}>Continue →</button>`
       }
     </div>
-    <p class="survey-hint ${sectionDone ? 'ok' : ''}" id="hint">${hintText}</p>
+    <p class="survey-hint ${sectionDone?'ok':''}" id="hint">${hintText}</p>
   </main>
   ${Footer()}`;
 }
 
 // ═══════════════════════════════════════════════════════
-//  SHARE
+//  SHARE (manual / no session)
 // ═══════════════════════════════════════════════════════
 
 function pageShare(encoded) {
   if (!encoded) { navigate('/survey/0'); return ''; }
-  const origin = window.location.origin + window.location.pathname;
+  const origin   = window.location.origin + window.location.pathname;
   const shareUrl = `${origin}#/share/${encoded}`;
 
   return `${Nav()}
@@ -909,12 +901,8 @@ function pageShare(encoded) {
     <div class="t-center mt-10 fade-in">
       <div style="width:60px;height:60px;border-radius:50%;background:var(--yes-bg);border:1px solid var(--yes);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:24px;color:var(--yes-text);">✓</div>
       <h2 class="heading">Your answers are ready</h2>
-      <p class="body-sm mt-4" style="max-width:400px;margin-left:auto;margin-right:auto;">
-        This link contains your encoded answers. Share it with your group however you like.
-        No one can see your individual responses — only the mutual results.
-      </p>
+      <p class="body-sm mt-4" style="max-width:400px;margin:0 auto;">Share this link with your group. No one can see your individual answers.</p>
     </div>
-
     <div class="card mt-8">
       <p class="label mb-3">Your share link</p>
       <div class="share-link-box" id="share-url">${shareUrl}</div>
@@ -923,45 +911,13 @@ function pageShare(encoded) {
         <span class="copy-confirm" id="copy-ok">✓ Copied</span>
       </div>
     </div>
-
     <div class="card card-accent card-sm mt-4">
       <p style="font-size:13px;color:var(--text-2);font-weight:300;line-height:1.65;">
-        <strong style="color:var(--text);">Save this now.</strong> Your answers exist only in this link.
-        If you close this page without copying, you'll need to retake the survey.
+        <strong style="color:var(--text);">Save this now.</strong> Your answers exist only in this link. Close this page and you'll need to retake the survey.
       </p>
     </div>
-
-    <div class="card mt-6">
-      <p class="label mb-4">What happens next</p>
-      <div class="steps">
-        <div class="step">
-          <div class="step-line"></div>
-          <div class="step-num" style="font-size:11px">1</div>
-          <div class="step-content">
-            <div class="step-title">Share this link with your group</div>
-            <div class="step-desc">Send via Telegram, iMessage, Signal — whatever your group uses.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-line"></div>
-          <div class="step-num" style="font-size:11px">2</div>
-          <div class="step-content">
-            <div class="step-title">Everyone takes the survey</div>
-            <div class="step-desc">Each person gets their own unique share link when done.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num" style="font-size:11px">3</div>
-          <div class="step-content">
-            <div class="step-title">Paste all links into the results page</div>
-            <div class="step-desc">The page shows only what everyone agreed on. No's stay hidden.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div style="display:flex;flex-direction:column;gap:10px;margin-top:24px;">
-      <a href="#/aggregate" class="btn btn-ghost btn-full">Go to Results Page →</a>
+      <a href="#/aggregate" class="btn btn-ghost btn-full">Combine Links on Results Page →</a>
       <a href="#/survey/0" class="btn btn-ghost btn-full" style="font-size:13px;color:var(--text-3)">Retake the Survey</a>
     </div>
   </main>
@@ -969,148 +925,57 @@ function pageShare(encoded) {
 }
 
 // ═══════════════════════════════════════════════════════
-//  AGGREGATE
+//  AGGREGATE (manual)
 // ═══════════════════════════════════════════════════════
 
 function pageAggregate() {
   return `${Nav()}
   <main class="page">
     <div style="padding-top:48px;">
-      <p class="label accent">Combine results</p>
-      <h2 class="heading mt-4">See what everyone agrees on</h2>
-      <p class="body-sm mt-4">
-        Paste each person's share link below — one per line.
-        You'll get a results permalink showing only the mutual agreements.
-      </p>
+      <p class="label accent">Manual combine</p>
+      <h2 class="heading mt-4">Combine everyone's links</h2>
+      <p class="body-sm mt-4">Paste each person's share link below — one per line. Prefer sessions? <a href="#/create" class="inline-link">Create one here</a>.</p>
     </div>
-
     <div class="mt-8">
-      <p class="label mb-3">Share links (one per line, 2–10 people)</p>
-      <textarea class="agg-textarea" id="links-in"
-        placeholder="https://discoverconsent.com/#/share/abc123&#10;https://discoverconsent.com/#/share/def456&#10;https://discoverconsent.com/#/share/ghi789"></textarea>
-      <p class="agg-error" id="agg-err">Could not find valid share links. Paste the full URLs from each person's share page.</p>
+      <p class="label mb-3">Share links (one per line)</p>
+      <textarea class="agg-textarea" id="links-in" placeholder="https://discoverconsent.com/#/share/abc123&#10;https://discoverconsent.com/#/share/def456"></textarea>
+      <p class="agg-error" id="agg-err">No valid share links found. Paste the full URLs.</p>
     </div>
-
     <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px;">
       <button class="btn btn-primary btn-full" data-a="compute">See What We All Agree On →</button>
-      <p style="font-size:12px;color:var(--text-3);text-align:center;font-weight:300;">
-        Computed entirely in your browser. Nothing is sent to any server.
-      </p>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="card card-sm">
-      <p class="label mb-3">How results work</p>
-      <p class="body-sm">
-        An item shows up only if <strong style="color:var(--text)">every participant</strong> answered Yes or Maybe.
-        If anyone said No — or didn't answer — that item is hidden entirely.
-        No one can tell who said No to what.
-      </p>
-      <div class="results-meta mt-3">
-        <span class="meta-pill"><span class="meta-dot yes"></span>All said Yes</span>
-        <span class="meta-pill"><span class="meta-dot maybe"></span>Includes some Maybes</span>
-      </div>
-    </div>
-
-    <div class="card card-sm mt-4">
-      <p class="label mb-3">Don't have your link?</p>
-      <p class="body-sm" style="margin-bottom:12px;">Take the survey first to get your share link.</p>
-      <a href="#/survey/0" class="btn btn-ghost btn-sm">Take the Survey →</a>
+      <p style="font-size:12px;color:var(--text-3);text-align:center;font-weight:300;">Computed entirely in your browser. Nothing is sent anywhere.</p>
     </div>
   </main>
   ${Footer()}`;
 }
 
 // ═══════════════════════════════════════════════════════
-//  RESULTS
+//  RESULTS (manual)
 // ═══════════════════════════════════════════════════════
 
 function pageResults(encodedStr) {
   if (!encodedStr) { navigate('/aggregate'); return ''; }
-
-  // Noindex results pages
   const m = document.createElement('meta');
-  m.name = 'robots'; m.content = 'noindex, nofollow';
+  m.name = 'robots'; m.content = 'noindex,nofollow';
   document.head.appendChild(m);
 
   const encList = encodedStr.split('.').filter(Boolean);
-  const results = computeResults(encList);
-  const total = results.reduce((s, r) => s + r.items.length, 0);
-  const pCount = encList.length;
-  const origin = window.location.origin + window.location.pathname;
+  const results  = computeResults(encList);
+  const origin   = window.location.origin + window.location.pathname;
   const resultsUrl = `${origin}#/results/${encodedStr}`;
-
-  if (!results.length) {
-    return `${Nav()}
-    <main class="page">
-      <div class="t-center mt-10">
-        <h2 class="heading">No mutual matches</h2>
-        <p class="body-sm mt-4" style="max-width:360px;margin:16px auto 0;">
-          There were no items that all ${pCount} participant${pCount!==1?'s':''} answered Yes or Maybe to.
-          That's valuable information — there's more to explore and discuss together.
-        </p>
-        <div style="display:flex;flex-direction:column;gap:10px;max-width:280px;margin:28px auto 0;">
-          <a href="#/aggregate" class="btn btn-ghost btn-full">← Try Again</a>
-          <a href="#/survey/0" class="btn btn-ghost btn-full">Retake the Survey</a>
-        </div>
-      </div>
-    </main>
-    ${Footer()}`;
-  }
-
-  const sections = results.map(({ section, items }) => `
-    <div class="results-section">
-      <div class="results-section-head">
-        <span class="results-section-title">${section.title}</span>
-        <span class="result-count">${items.length}</span>
-      </div>
-      <div class="results-chips">
-        ${items.map(item => `
-          <div class="result-chip ${item.unanimous ? 'r-yes' : 'r-maybe'} pop-in">
-            <div class="chip-dot"></div>
-            <span class="chip-text">${item.text}</span>
-            <span class="chip-badge">${item.unanimous ? 'Yes' : 'Maybe'}</span>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `).join('');
 
   return `${Nav()}
   <main class="page">
-    <div style="padding-top:40px;">
-      <p class="label accent">${pCount} participant${pCount!==1?'s':''} · ${total} match${total!==1?'es':''}</p>
-      <h2 class="heading mt-4">Your common ground</h2>
-      <div class="results-meta mt-3">
-        <span class="meta-pill"><span class="meta-dot yes"></span>All said Yes</span>
-        <span class="meta-pill"><span class="meta-dot maybe"></span>Includes Maybes</span>
-      </div>
-    </div>
-
-    ${sections}
-
+    ${ResultsHTML(results, encList.length)}
     <div class="divider"></div>
-
     <div class="card card-sm mb-3">
       <p class="label mb-3">Share these results</p>
-      <p class="body-sm" style="margin-bottom:10px;">
-        This URL is a permanent results link — anyone with it can view the same results.
-      </p>
       <div class="share-link-box" style="font-size:11px;">${resultsUrl}</div>
       <button class="btn btn-ghost btn-full btn-sm mt-2" data-a="copy" data-url="${resultsUrl}" id="copy-btn">Copy Results Link</button>
       <span class="copy-confirm" id="copy-ok">✓ Copied</span>
     </div>
-
-    <div class="card card-sm" style="text-align:center;margin-bottom:16px;">
-      <p style="font-size:12px;color:var(--text-3);font-weight:300;line-height:1.7;">
-        No names. No attribution. No server logged this page.<br>
-        All computation happened in your browser.
-      </p>
-    </div>
-
     <div style="display:flex;gap:10px;">
-      <a href="#/survey/0" class="btn btn-ghost" style="flex:1;font-size:13px;">Retake Survey</a>
+      <a href="#/survey/0" class="btn btn-ghost" style="flex:1;font-size:13px;">Retake</a>
       <a href="#/aggregate" class="btn btn-ghost" style="flex:1;font-size:13px;">New Results</a>
     </div>
   </main>
@@ -1122,7 +987,7 @@ function pageResults(encodedStr) {
 // ═══════════════════════════════════════════════════════
 
 function pagePrivacy() {
-  const updated = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const updated = new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'});
   return `${Nav()}
   <main class="page">
     <div style="padding-top:48px;">
@@ -1133,7 +998,7 @@ function pagePrivacy() {
     <div class="divider"></div>
     <div class="prose">
       <h2>The short version</h2>
-      <p>We collect nothing. We store nothing. We know nothing about you. This is not legal boilerplate — it is a technical fact you can verify in our open-source code.</p>
+      <p>We collect nothing that identifies you. We store nothing that links back to a person. Session data is anonymous encoded strings that auto-delete after 48 hours.</p>
 
       <h2>What we don't collect</h2>
       <ul>
@@ -1142,33 +1007,24 @@ function pagePrivacy() {
         <li>No cookies — not even session cookies</li>
         <li>No analytics or tracking scripts</li>
         <li>No advertising pixels or networks</li>
-        <li>No device fingerprinting</li>
-        <li>No location data</li>
-        <li>No survey answers — ever</li>
+        <li>No device fingerprinting or location data</li>
       </ul>
 
-      <h2>How your answers are stored</h2>
-      <p>Your survey answers are encoded directly into the URL you copy and share. They never transit our systems. The web server receives only a request for a static HTML file. Because your answers live in the URL fragment (the part after <strong>#</strong>), browsers do not include that in the HTTP request — the server literally cannot see it.</p>
-      <p>When you combine links on the results page, the computation runs entirely inside your browser using JavaScript. No data is transmitted anywhere during this step.</p>
+      <h2>Sessions — what the server stores</h2>
+      <p>When you use a session, your survey answers are encoded into an anonymous string (like <strong>WU1ZWU5NTll...</strong>) and stored in a JSON file on the server, associated only with the session code. There is no name, email, IP address, or any identifier attached to it. Sessions are automatically deleted after 48 hours.</p>
+      <p>If you use the manual "combine links" feature, no data is sent to the server at all — all computation happens in your browser.</p>
 
-      <h2>What the server does see</h2>
-      <p>Standard HTTP request logs: timestamp, your IP address, and that a file was served. This is identical to any static website. These logs may be retained up to 30 days for security purposes, but contain no information about your answers, identity, or group.</p>
+      <h2>What the server sees</h2>
+      <p>Standard HTTP request logs: timestamp, IP address, and which file was requested. These logs may be retained up to 30 days for security purposes. No survey answer data appears in server logs.</p>
 
       <h2>Third-party services</h2>
-      <p>We use <strong>Google Fonts</strong> to load typefaces. This sends a request to Google's servers to retrieve font files. If this concerns you, blocking external font requests does not affect the site's functionality.</p>
-      <p>We use no advertising networks, analytics platforms, social media widgets, or any other third-party data collection service.</p>
-
-      <h2>Results links</h2>
-      <p>Results URLs contain encoded answer data within the URL fragment. Anyone who receives a results link can view those results. Share results links only with people you intend to see them. We do not index results pages in search engines.</p>
+      <p>We use <strong>Google Fonts</strong> to load typefaces. We use no advertising networks, analytics platforms, social media widgets, or any other third-party data collection service.</p>
 
       <h2>Open source</h2>
       <p>The entire codebase is publicly available at <a href="https://github.com/discoverconsent/discoverconsent" target="_blank" rel="noopener">github.com/discoverconsent/discoverconsent</a>. Read the code, verify our claims, run your own copy.</p>
 
-      <h2>Changes</h2>
-      <p>If we ever change how data is handled, we will update this page and note the date. The history of this policy is always visible in the repository's commit log.</p>
-
       <h2>Contact</h2>
-      <p>Privacy questions can be raised publicly in our <a href="https://github.com/discoverconsent/discoverconsent/issues" target="_blank" rel="noopener">GitHub Issues</a>.</p>
+      <p>Privacy questions: <a href="https://github.com/discoverconsent/discoverconsent/issues" target="_blank" rel="noopener">GitHub Issues</a>.</p>
     </div>
   </main>
   ${Footer()}`;
@@ -1188,23 +1044,18 @@ function pageAbout() {
     <div class="divider"></div>
     <div class="prose">
       <h2>The idea</h2>
-      <p>Discover Consent is a free, open-source tool for honest conversations about intimacy and shared preferences. It's designed for couples and groups who want to surface their common ground privately — before diving into any conversation, not after.</p>
-
+      <p>Discover Consent is a free, open-source tool for honest conversations about intimacy and shared preferences. It's designed for couples and groups who want to find their common ground privately — before any conversation, not after.</p>
       <h2>How it works</h2>
-      <p>Each person answers 46 questions privately across six topics: who you're open to, how you connect, where you play, what's on the table, health and safety, and aftercare. When everyone is done, share links are combined to reveal only the mutual agreements — the things everyone said Yes or Maybe to.</p>
-      <p>No's are completely invisible. No one knows who said No to what. The results show only your common ground.</p>
-
+      <p>Each person answers 46 questions privately across six topics. When everyone is done, only the mutual agreements appear — things everyone said Yes or Maybe to. No's are completely invisible. No one knows who said No to what.</p>
+      <h2>The question design</h2>
+      <p>Every question is framed as the <em>permissive option</em>. This means that when an item is hidden from the results, the safe or conservative choice is the default. Safer sex and substance questions, in particular, are designed so that their absence from results signals: use protection, exchange test results, keep it sober.</p>
       <h2>Who it's for</h2>
-      <p>Built with the lifestyle community in mind, Discover Consent is useful for anyone navigating honest conversations — new couples exploring together, established groups coordinating before an event, or anyone who wants a structured, private way to surface shared interests without the awkwardness of asking directly.</p>
-
-      <h2>Privacy as a feature</h2>
-      <p>No accounts. No emails. No cookies. No tracking. Your answers live only in the URL you choose to share. The server has no knowledge of your responses. This isn't a promise — it's a technical fact you can verify in the open-source code.</p>
-
+      <p>Built with the lifestyle community in mind, but useful for any couple or group navigating honest conversations about what they're open to.</p>
       <h2>Open source</h2>
-      <p>Discover Consent is MIT licensed and fully open source. Run your own copy, suggest questions, report issues, or contribute at <a href="https://github.com/discoverconsent/discoverconsent" target="_blank" rel="noopener">github.com/discoverconsent/discoverconsent</a>.</p>
+      <p>MIT licensed. <a href="https://github.com/discoverconsent/discoverconsent" target="_blank" rel="noopener">github.com/discoverconsent/discoverconsent</a>.</p>
     </div>
     <div class="t-center mt-8">
-      <a href="#/survey/0" class="btn btn-primary">Take the Survey →</a>
+      <a href="#/create" class="btn btn-primary">Create a Session →</a>
     </div>
   </main>
   ${Footer()}`;
@@ -1214,23 +1065,21 @@ function pageAbout() {
 //  EVENTS
 // ═══════════════════════════════════════════════════════
 
-// Answer selection — native radios fire 'change'. The visual highlight is
-// pure CSS (:checked), so this only saves state and updates nav/progress.
 function refreshSurveyState() {
   const navDiv = document.getElementById('survey-nav');
   if (!navDiv) return;
-  const si = parseInt(navDiv.dataset.si ?? 0);
+  const si  = parseInt(navDiv.dataset.si ?? 0);
   const sqs = QUESTIONS.filter(q => q.si === si);
   const done = sqs.every(q => answers[q.gi]);
 
-  const actionBtn = document.querySelector('[data-a="next"], [data-a="finish"]');
-  if (actionBtn) actionBtn.disabled = !done;
+  const btn = document.querySelector('[data-a="next"], [data-a="finish"]');
+  if (btn) btn.disabled = !done;
 
   const hint = document.getElementById('hint');
   if (hint) {
     const rem = sqs.length - sqs.filter(q => answers[q.gi]).length;
     hint.textContent = done ? '✓ Section complete — you can continue'
-      : `${rem} question${rem !== 1 ? 's' : ''} left in this section`;
+      : `${rem} question${rem!==1?'s':''} left in this section`;
     hint.className = 'survey-hint' + (done ? ' ok' : '');
   }
 
@@ -1243,6 +1092,7 @@ function refreshSurveyState() {
   }
 }
 
+// Radio change — save answer + update UI
 document.addEventListener('change', function(e) {
   const input = e.target.closest('.answer-input');
   if (!input) return;
@@ -1250,95 +1100,131 @@ document.addEventListener('change', function(e) {
   refreshSurveyState();
 });
 
+// All click actions
 document.addEventListener('click', function(e) {
   const el = e.target.closest('[data-a]');
   if (!el) return;
   const a = el.dataset.a;
 
-  // ── Survey navigation ──
-  if (a === 'back') {
-    navigate(`/survey/${parseInt(el.dataset.si) - 1}`);
-    return;
-  }
+  if (a === 'back') { navigate(el.dataset.hash); return; }
+
   if (a === 'next') {
-    const si = parseInt(el.dataset.si);
+    const si  = parseInt(el.dataset.si);
     const sqs = QUESTIONS.filter(q => q.si === si);
-    if (sqs.every(q => answers[q.gi])) navigate(`/survey/${si + 1}`);
-    return;
-  }
-  if (a === 'finish') {
-    const si = SECTIONS.length - 1;
-    const sqs = QUESTIONS.filter(q => q.si === si);
-    if (sqs.every(q => answers[q.gi])) navigate(`/share/${encode(answers)}`);
+    if (sqs.every(q => answers[q.gi])) navigate(el.dataset.hash);
     return;
   }
 
-  // ── Copy link ──
+  if (a === 'finish') {
+    const si  = SECTIONS.length - 1;
+    const sqs = QUESTIONS.filter(q => q.si === si);
+    if (!sqs.every(q => answers[q.gi])) return;
+    const encoded = encode(answers);
+    const sc = el.dataset.session;
+    if (sc) {
+      el.disabled = true;
+      el.textContent = 'Submitting…';
+      fetch(`/api/session/${sc}/submit`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({encoded})
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.ok) navigate(`/session/${sc}`);
+        else { el.disabled = false; el.textContent = 'Submit to Session →'; alert('Error: ' + data.error); }
+      })
+      .catch(() => { el.disabled = false; el.textContent = 'Submit to Session →'; alert('Network error — please try again.'); });
+    } else {
+      navigate(`/share/${encoded}`);
+    }
+    return;
+  }
+
+  if (a === 'join-submit') {
+    const code = (document.getElementById('code-input')?.value || '').trim().toUpperCase();
+    const err  = document.getElementById('join-error');
+    if (!code || code.length !== 6) {
+      if (err) { err.textContent = 'Please enter a 6-character session code.'; err.classList.add('show'); }
+      return;
+    }
+    fetch(`/api/session/${code}`)
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+      .then(() => navigate(`/join/${code}`))
+      .catch(() => {
+        if (err) { err.textContent = 'Session not found or expired. Check the code and try again.'; err.classList.add('show'); }
+      });
+    return;
+  }
+
+  if (a === 'refresh-session') {
+    fetchSessionResults(el.dataset.code);
+    return;
+  }
+
   if (a === 'copy') {
     const url = el.dataset.url;
-    const btn = el;
-    const ok = document.getElementById('copy-ok');
+    const ok  = document.getElementById('copy-ok');
     navigator.clipboard.writeText(url).then(() => {
-      btn.textContent = '✓ Copied!';
+      const orig = el.textContent;
+      el.textContent = '✓ Copied!';
       if (ok) ok.classList.add('show');
-      setTimeout(() => {
-        btn.textContent = btn === document.getElementById('copy-btn') ? 'Copy Link' : 'Copy Results Link';
-        if (ok) ok.classList.remove('show');
-      }, 2500);
+      setTimeout(() => { el.textContent = orig; if (ok) ok.classList.remove('show'); }, 2500);
     }).catch(() => {
-      // Fallback: select the text
       const box = document.querySelector('.share-link-box');
-      if (box) {
-        const sel = window.getSelection();
-        const range = document.createRange();
-        range.selectNodeContents(box);
-        sel.removeAllRanges();
-        sel.addRange(range);
-      }
+      if (box) { const sel = window.getSelection(); const r = document.createRange(); r.selectNodeContents(box); sel.removeAllRanges(); sel.addRange(r); }
     });
     return;
   }
 
-  // ── Compute results ──
   if (a === 'compute') {
-    const ta = document.getElementById('links-in');
+    const ta  = document.getElementById('links-in');
     const err = document.getElementById('agg-err');
-    if (!ta) return;
-    const raw = ta.value.trim();
     err.classList.remove('show');
-
-    if (!raw) {
-      err.textContent = 'Please paste at least one share link.';
-      err.classList.add('show');
-      return;
-    }
-
-    const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
-    const encs = [];
-    for (const line of lines) {
-      const m = line.match(/#\/share\/([A-Za-z0-9_-]+)/);
-      if (m) { encs.push(m[1]); continue; }
-      if (/^[A-Za-z0-9_-]{20,}$/.test(line)) { encs.push(line); continue; }
-    }
-
-    if (!encs.length) {
-      err.textContent = 'No valid share links found. Paste full URLs from each person\'s share page.';
-      err.classList.add('show');
-      ta.focus();
-      return;
-    }
-
+    const lines = (ta?.value || '').split('\n').map(l => l.trim()).filter(Boolean);
+    const encs  = lines.map(l => { const m = l.match(/#\/share\/([A-Za-z0-9_-]+)/); return m ? m[1] : (/^[A-Za-z0-9_-]{20,}$/.test(l) ? l : null); }).filter(Boolean);
+    if (!encs.length) { err.textContent = 'No valid share links found.'; err.classList.add('show'); return; }
     navigate(`/results/${encs.join('.')}`);
     return;
   }
 });
 
+// Auto-handle #/join/{code} — validate then redirect to survey
+function maybeInitJoin() {
+  const h = window.location.hash.slice(1) || '/';
+  const parts = h.split('/').filter(Boolean);
+  if (parts[0] === 'join' && parts[1]) {
+    const code = parts[1].toUpperCase();
+    fetch(`/api/session/${code}`)
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+      .then(() => navigate(`/survey/0/${code}`))
+      .catch(() => {
+        document.getElementById('app').innerHTML = `${Nav()}
+          <main class="page">
+            <div style="padding-top:48px;text-align:center;">
+              <h2 class="heading">Session not found</h2>
+              <p class="body-sm mt-4">This session code is invalid or has expired.</p>
+              <div style="display:flex;flex-direction:column;gap:10px;max-width:280px;margin:24px auto 0;">
+                <a href="#/join" class="btn btn-ghost btn-full">Try Another Code</a>
+                <a href="#/create" class="btn btn-primary btn-full">Create a Session</a>
+              </div>
+            </div>
+          </main>${Footer()}`;
+      });
+  }
+}
+
 // ═══════════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════════
 
-window.addEventListener('hashchange', render);
+window.addEventListener('hashchange', () => {
+  render();
+  maybeInitJoin();
+});
+
 render();
+maybeInitJoin();
 </script>
 </body>
 </html>

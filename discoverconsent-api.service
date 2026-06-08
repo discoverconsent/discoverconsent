@@ -1,0 +1,18 @@
+[Unit]
+Description=Discover Consent Session API
+After=network.target
+
+[Service]
+Type=simple
+User=revolt
+WorkingDirectory=/home/revolt/discoverconsent
+ExecStart=/usr/bin/python3 /home/revolt/discoverconsent/api.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+# Restrict to localhost only — Nginx proxies external requests
+Environment=FLASK_ENV=production
+
+[Install]
+WantedBy=multi-user.target
