@@ -156,12 +156,19 @@
     .btn-full { width: 100%; }
     .btn-sm { height: 38px; padding: 0 16px; font-size: 13px; }
 
-    /* ── ANSWER BUTTONS ── */
+    /* ── ANSWER BUTTONS (native radio + label — browser drives the visual) ── */
     .answer-group {
       display: grid; grid-template-columns: 1fr 1fr 1fr;
       gap: 6px; margin-top: 10px;
     }
+    .answer-input {
+      position: absolute;
+      width: 1px; height: 1px;
+      opacity: 0; margin: 0;
+      pointer-events: none;
+    }
     .answer-btn {
+      display: flex; align-items: center; justify-content: center;
       height: 44px;
       border-radius: var(--r-xs);
       border: 1px solid var(--border);
@@ -171,26 +178,32 @@
       font-size: 12px; font-weight: 500;
       letter-spacing: .08em; text-transform: uppercase;
       cursor: pointer;
-      /* Only transition transform — don't animate bg/border on mobile (deferred repaint) */
-      transition: transform .1s ease;
+      transition: transform .1s ease, background .12s ease, border-color .12s ease, color .12s ease, box-shadow .12s ease;
       -webkit-tap-highlight-color: transparent;
       -webkit-touch-callout: none;
       -webkit-user-select: none;
       user-select: none;
-      /* Eliminate tap delay and text-selection gesture on iOS */
       touch-action: manipulation;
     }
     .answer-btn:active { transform: scale(.95); }
-    .answer-btn:not(.sel-Y):not(.sel-M):not(.sel-N):hover { border-color: var(--border-2); color: var(--text-2); }
+    .answer-btn:hover { border-color: var(--border-2); color: var(--text-2); }
 
-    /* Immediate :active visual feedback BEFORE JS fires — pure CSS, no delay */
-    .answer-btn[data-val="Y"]:active { background: var(--yes-bg); border-color: var(--yes); color: var(--yes-text); }
-    .answer-btn[data-val="M"]:active { background: var(--maybe-bg); border-color: var(--maybe); color: var(--maybe-text); }
-    .answer-btn[data-val="N"]:active { background: rgba(255,255,255,.06); border-color: var(--border-2); color: var(--text); }
-
-    .answer-btn.sel-Y { background: var(--yes-bg); border-color: var(--yes); color: var(--yes-text); }
-    .answer-btn.sel-M { background: var(--maybe-bg); border-color: var(--maybe); color: var(--maybe-text); }
-    .answer-btn.sel-N { background: rgba(255,255,255,.04); border-color: var(--border-2); color: var(--text-2); }
+    /* :checked drives the highlight + box — instant, native, no JS timing */
+    .answer-input:checked + .ans-Y {
+      background: var(--yes-bg); border-color: var(--yes);
+      color: var(--yes-text); box-shadow: 0 0 0 1.5px var(--yes);
+    }
+    .answer-input:checked + .ans-M {
+      background: var(--maybe-bg); border-color: var(--maybe);
+      color: var(--maybe-text); box-shadow: 0 0 0 1.5px var(--maybe);
+    }
+    .answer-input:checked + .ans-N {
+      background: rgba(255,255,255,.05); border-color: var(--text-2);
+      color: var(--text); box-shadow: 0 0 0 1.5px var(--text-3);
+    }
+    .answer-input:focus-visible + .answer-btn {
+      outline: 2px solid var(--accent); outline-offset: 2px;
+    }
 
     /* ── CARDS ── */
     .card {
@@ -827,12 +840,16 @@ function pageSurvey(si) {
 
   const qRows = sectionQs.map(q => {
     const cur = answers[q.gi];
+    const n = `q${q.gi}`;
     return `<div class="question-item">
       <div class="question-text">${q.text}</div>
       <div class="answer-group">
-        <button class="answer-btn ${cur === 'Y' ? 'sel-Y' : ''}" data-a="answer" data-qi="${q.gi}" data-val="Y">Yes</button>
-        <button class="answer-btn ${cur === 'M' ? 'sel-M' : ''}" data-a="answer" data-qi="${q.gi}" data-val="M">Maybe</button>
-        <button class="answer-btn ${cur === 'N' ? 'sel-N' : ''}" data-a="answer" data-qi="${q.gi}" data-val="N">No</button>
+        <input type="radio" class="answer-input" name="${n}" id="${n}-Y" value="Y" data-qi="${q.gi}" ${cur === 'Y' ? 'checked' : ''}>
+        <label class="answer-btn ans-Y" for="${n}-Y">Yes</label>
+        <input type="radio" class="answer-input" name="${n}" id="${n}-M" value="M" data-qi="${q.gi}" ${cur === 'M' ? 'checked' : ''}>
+        <label class="answer-btn ans-M" for="${n}-M">Maybe</label>
+        <input type="radio" class="answer-input" name="${n}" id="${n}-N" value="N" data-qi="${q.gi}" ${cur === 'N' ? 'checked' : ''}>
+        <label class="answer-btn ans-N" for="${n}-N">No</label>
       </div>
     </div>`;
   }).join('');
@@ -1193,36 +1210,26 @@ function pageAbout() {
 //  EVENTS
 // ═══════════════════════════════════════════════════════
 
-// Shared answer handler — called by both touchstart and click
-function handleAnswer(el) {
-  const qi = parseInt(el.dataset.qi);
-  const val = el.dataset.val;
-  answers[qi] = val;
-
-  // Update sibling buttons immediately
-  el.closest('.answer-group').querySelectorAll('.answer-btn').forEach(b => {
-    b.className = 'answer-btn' + (b.dataset.val === val ? ` sel-${val}` : '');
-  });
-
-  // Update continue/finish button state
-  const actionBtn = document.querySelector('[data-a="next"], [data-a="finish"]');
+// Answer selection — native radios fire 'change'. The visual highlight is
+// pure CSS (:checked), so this only saves state and updates nav/progress.
+function refreshSurveyState() {
   const navDiv = document.getElementById('survey-nav');
-  if (actionBtn && navDiv) {
-    const si = parseInt(navDiv.dataset.si ?? 0);
-    const sqs = QUESTIONS.filter(q => q.si === si);
-    const done = sqs.every(q => answers[q.gi]);
-    actionBtn.disabled = !done;
+  if (!navDiv) return;
+  const si = parseInt(navDiv.dataset.si ?? 0);
+  const sqs = QUESTIONS.filter(q => q.si === si);
+  const done = sqs.every(q => answers[q.gi]);
 
-    const hint = document.getElementById('hint');
-    if (hint) {
-      const rem = sqs.length - sqs.filter(q => answers[q.gi]).length;
-      hint.textContent = done ? '✓ Section complete — you can continue'
-        : `${rem} question${rem!==1?'s':''} left in this section`;
-      hint.className = 'survey-hint' + (done ? ' ok' : '');
-    }
+  const actionBtn = document.querySelector('[data-a="next"], [data-a="finish"]');
+  if (actionBtn) actionBtn.disabled = !done;
+
+  const hint = document.getElementById('hint');
+  if (hint) {
+    const rem = sqs.length - sqs.filter(q => answers[q.gi]).length;
+    hint.textContent = done ? '✓ Section complete — you can continue'
+      : `${rem} question${rem !== 1 ? 's' : ''} left in this section`;
+    hint.className = 'survey-hint' + (done ? ' ok' : '');
   }
 
-  // Update progress bar live
   const prog = document.getElementById('prog');
   if (prog) {
     const pct = Math.round((Object.keys(answers).length / TOTAL) * 100);
@@ -1232,25 +1239,17 @@ function handleAnswer(el) {
   }
 }
 
-// touchstart fires instantly on mobile — no 300ms delay
-document.addEventListener('touchstart', function(e) {
-  const el = e.target.closest('[data-a="answer"]');
-  if (!el) return;
-  el._handledByTouch = true;
-  handleAnswer(el);
-}, { passive: true });
+document.addEventListener('change', function(e) {
+  const input = e.target.closest('.answer-input');
+  if (!input) return;
+  answers[parseInt(input.dataset.qi)] = input.value;
+  refreshSurveyState();
+});
 
 document.addEventListener('click', function(e) {
   const el = e.target.closest('[data-a]');
   if (!el) return;
   const a = el.dataset.a;
-
-  // ── Answer button (desktop only — mobile handled by touchstart) ──
-  if (a === 'answer') {
-    if (el._handledByTouch) { el._handledByTouch = false; return; }
-    handleAnswer(el);
-    return;
-  }
 
   // ── Survey navigation ──
   if (a === 'back') {
