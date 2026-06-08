@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Results and share pages are noindexed via meta robots tags in the page itself.
+# Hash fragments (#/results/, #/share/) are never sent to servers by browsers,
+# so this file cannot control them directly. The noindex meta tag handles it.
+
+# Sitemap
+Sitemap: https://discoverconsent.com/sitemap.xml

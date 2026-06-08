@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="A private, anonymous consent conversation tool for couples and groups. No accounts. No emails. No tracking. Your answers never leave your device.">
+  <meta name="theme-color" content="#08080b">
+  <meta property="og:title" content="Discover Consent">
+  <meta property="og:description" content="Find your common ground. A private tool for honest conversations — no accounts, no emails, no data stored.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://discoverconsent.com">
+  <title>Discover Consent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #08080b;
+      --surface:      #101014;
+      --surface-2:    #17171d;
+      --surface-3:    #1e1e26;
+      --border:       #222230;
+      --border-2:     #2c2c3a;
+      --accent:       #bf4060;
+      --accent-h:     #d45070;
+      --accent-dim:   rgba(191,64,96,.12);
+      --accent-dim2:  rgba(191,64,96,.06);
+      --yes:          #3a8f62;
+      --yes-bg:       rgba(58,143,98,.13);
+      --yes-text:     #68d498;
+      --maybe:        #c07330;
+      --maybe-bg:     rgba(192,115,48,.13);
+      --maybe-text:   #f0a84e;
+      --text:         #edeae6;
+      --text-2:       #9490a0;
+      --text-3:       #55526a;
+      --r:            14px;
+      --r-sm:         8px;
+      --r-xs:         6px;
+      --ff-display:   'Cormorant Garamond', Georgia, serif;
+      --ff-body:      'Jost', system-ui, sans-serif;
+      --max:          600px;
+      --transition:   .15s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--ff-body);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Grain overlay for depth */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: .03;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    #app { min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(8,8,11,.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      height: 56px;
+      display: flex; align-items: center;
+      padding: 0 20px;
+      gap: 16px;
+    }
+    .nav-logo {
+      font-family: var(--ff-display);
+      font-size: 21px; font-style: italic; font-weight: 400;
+      color: var(--text); text-decoration: none;
+      letter-spacing: .01em; white-space: nowrap;
+      flex: 1;
+    }
+    .nav-logo em { font-style: italic; color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 20px; list-style: none; }
+    .nav-links a {
+      font-size: 13px; font-weight: 400;
+      color: var(--text-2); text-decoration: none;
+      letter-spacing: .03em; transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── LAYOUT ── */
+    .page {
+      flex: 1;
+      max-width: var(--max);
+      margin: 0 auto; width: 100%;
+      padding: 0 20px 100px;
+    }
+
+    /* ── TYPE ── */
+    .display {
+      font-family: var(--ff-display);
+      font-size: clamp(38px, 9vw, 60px);
+      font-weight: 300; line-height: 1.08;
+      letter-spacing: -.015em;
+    }
+    .display em { font-style: italic; color: var(--accent); }
+    .heading {
+      font-family: var(--ff-display);
+      font-size: clamp(24px, 5vw, 34px);
+      font-weight: 400; line-height: 1.2;
+    }
+    .label {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-3);
+    }
+    .label.accent { color: var(--accent); }
+    .body-sm {
+      font-size: 14px; font-weight: 300;
+      color: var(--text-2); line-height: 1.7;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; height: 48px; padding: 0 24px;
+      border-radius: var(--r-sm);
+      border: 1px solid transparent;
+      font-family: var(--ff-body);
+      font-size: 14px; font-weight: 500;
+      letter-spacing: .04em;
+      text-decoration: none; cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-primary:hover:not(:disabled) { background: var(--accent-h); border-color: var(--accent-h); }
+    .btn-primary:disabled { opacity: .3; cursor: not-allowed; }
+    .btn-ghost { background: transparent; color: var(--text-2); border-color: var(--border); }
+    .btn-ghost:hover { background: var(--surface-2); color: var(--text); border-color: var(--border-2); }
+    .btn-full { width: 100%; }
+    .btn-sm { height: 38px; padding: 0 16px; font-size: 13px; }
+
+    /* ── ANSWER BUTTONS ── */
+    .answer-group {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px; margin-top: 10px;
+    }
+    .answer-btn {
+      height: 44px;
+      border-radius: var(--r-xs);
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text-3);
+      font-family: var(--ff-body);
+      font-size: 12px; font-weight: 500;
+      letter-spacing: .08em; text-transform: uppercase;
+      cursor: pointer;
+      transition: all .12s ease;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .answer-btn:active { transform: scale(.96); }
+    .answer-btn:not(.selected):hover { border-color: var(--border-2); color: var(--text-2); }
+
+    .answer-btn.sel-Y { background: var(--yes-bg); border-color: var(--yes); color: var(--yes-text); }
+    .answer-btn.sel-M { background: var(--maybe-bg); border-color: var(--maybe); color: var(--maybe-text); }
+    .answer-btn.sel-N { background: rgba(255,255,255,.04); border-color: var(--border-2); color: var(--text-2); }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 24px;
+    }
+    .card-sm { padding: 16px 20px; }
+    .card-accent { border-color: rgba(191,64,96,.25); background: var(--accent-dim2); }
+
+    /* ── HOME ── */
+    .hero {
+      padding: 64px 0 48px;
+      text-align: center;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px;
+      background: var(--accent-dim); border: 1px solid rgba(191,64,96,.2);
+      border-radius: 999px;
+      font-size: 11px; font-weight: 500;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 28px;
+    }
+    .hero-body {
+      font-size: 16px; font-weight: 300;
+      color: var(--text-2); line-height: 1.7;
+      max-width: 440px; margin: 0 auto;
+    }
+    .hero-ctas {
+      display: flex; flex-direction: column; gap: 10px;
+      max-width: 300px; margin: 32px auto 0;
+    }
+
+    /* Steps */
+    .steps { display: flex; flex-direction: column; gap: 0; margin-top: 24px; }
+    .step { display: flex; gap: 18px; padding-bottom: 28px; position: relative; }
+    .step:last-child { padding-bottom: 0; }
+    .step-line {
+      position: absolute; left: 15px; top: 34px; bottom: 0;
+      width: 1px; background: var(--border);
+    }
+    .step:last-child .step-line { display: none; }
+    .step-num {
+      width: 32px; height: 32px; min-width: 32px; border-radius: 50%;
+      background: var(--surface-2); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 500; color: var(--accent);
+      position: relative; z-index: 1;
+    }
+    .step-content { padding-top: 4px; }
+    .step-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+    .step-desc { font-size: 14px; color: var(--text-2); font-weight: 300; line-height: 1.55; }
+
+    /* Promise grid */
+    .promise-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin-top: 20px;
+    }
+    .promise-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 13px 14px;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .promise-dot {
+      width: 6px; height: 6px; min-width: 6px;
+      border-radius: 50%; background: var(--accent);
+      margin-top: 6px;
+    }
+    .promise-text { font-size: 13px; color: var(--text-2); font-weight: 300; line-height: 1.4; }
+
+    /* Badges */
+    .badge-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 12px; color: var(--text-2); font-weight: 400;
+    }
+
+    /* ── SURVEY ── */
+    .survey-header {
+      position: sticky; top: 56px; z-index: 100;
+      background: rgba(8,8,11,.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      margin: 0 -20px;
+      padding: 12px 20px;
+    }
+    .survey-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .progress-bar {
+      height: 2px; background: var(--border);
+      border-radius: 999px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: var(--accent);
+      border-radius: 999px; transition: width .4s ease;
+    }
+    .section-intro { padding: 32px 0 20px; }
+    .section-num {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 8px;
+    }
+    .section-title {
+      font-family: var(--ff-display);
+      font-size: 30px; font-weight: 400; color: var(--text);
+      margin-bottom: 5px;
+    }
+    .section-sub { font-size: 14px; font-weight: 300; color: var(--text-2); }
+    .questions-list { display: flex; flex-direction: column; }
+    .question-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .question-item:last-child { border-bottom: none; }
+    .question-text {
+      font-size: 15px; font-weight: 400; color: var(--text);
+      line-height: 1.4; margin-bottom: 10px;
+    }
+    .survey-nav { display: flex; gap: 10px; margin-top: 28px; }
+    .survey-nav .btn-primary { flex: 1; }
+    .survey-hint {
+      text-align: center; font-size: 12px; color: var(--text-3);
+      margin-top: 10px; padding-bottom: 20px; font-weight: 300;
+    }
+    .survey-hint.ok { color: var(--yes-text); }
+
+    /* Section progress pills */
+    .section-pills {
+      display: flex; gap: 4px; margin-top: 10px;
+    }
+    .section-pill {
+      flex: 1; height: 3px; border-radius: 999px;
+      background: var(--border); transition: background .3s;
+    }
+    .section-pill.done { background: var(--yes); }
+    .section-pill.active { background: var(--accent); }
+
+    /* ── SHARE PAGE ── */
+    .share-link-box {
+      background: var(--surface-3);
+      border: 1px solid var(--border-2);
+      border-radius: var(--r-sm);
+      padding: 14px 16px;
+      font-size: 13px; color: var(--text-2);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      word-break: break-all; line-height: 1.6;
+      margin: 14px 0;
+      user-select: all;
+    }
+    .copy-confirm {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; color: var(--yes-text); font-weight: 500;
+      opacity: 0; transition: opacity .2s; margin-left: 8px;
+    }
+    .copy-confirm.show { opacity: 1; }
+
+    /* ── AGGREGATE ── */
+    .agg-textarea {
+      width: 100%; min-height: 140px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 14px 16px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px; color: var(--text);
+      line-height: 1.6; resize: vertical; outline: none;
+      transition: border-color var(--transition);
+    }
+    .agg-textarea:focus { border-color: var(--border-2); }
+    .agg-textarea::placeholder { color: var(--text-3); }
+    .agg-error { font-size: 13px; color: var(--accent); font-weight: 400; margin-top: 8px; display: none; }
+    .agg-error.show { display: block; }
+
+    /* ── RESULTS ── */
+    .results-meta {
+      display: flex; align-items: center; gap: 10px;
+      flex-wrap: wrap; margin-top: 6px;
+    }
+    .meta-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 12px; color: var(--text-2);
+    }
+    .meta-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .meta-dot.yes { background: var(--yes); }
+    .meta-dot.maybe { background: var(--maybe); }
+
+    .results-section { margin: 36px 0; }
+    .results-section-head {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    }
+    .results-section-title {
+      font-family: var(--ff-display);
+      font-size: 20px; font-weight: 400; color: var(--text);
+    }
+    .result-count {
+      font-size: 11px; font-weight: 500; color: var(--text-3);
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 999px; padding: 2px 9px;
+    }
+    .results-chips { display: flex; flex-direction: column; gap: 7px; }
+    .result-chip {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-sm); padding: 12px 14px;
+      transition: border-color .15s;
+    }
+    .result-chip.r-yes { border-color: rgba(58,143,98,.25); background: rgba(58,143,98,.05); }
+    .result-chip.r-maybe { border-color: rgba(192,115,48,.25); background: rgba(192,115,48,.05); }
+    .chip-dot { width: 7px; height: 7px; min-width: 7px; border-radius: 50%; }
+    .r-yes .chip-dot { background: var(--yes); }
+    .r-maybe .chip-dot { background: var(--maybe); }
+    .chip-text { font-size: 14px; color: var(--text); font-weight: 400; line-height: 1.3; }
+    .chip-badge {
+      margin-left: auto; font-size: 10px; font-weight: 500;
+      letter-spacing: .06em; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 4px; white-space: nowrap;
+    }
+    .r-yes .chip-badge { background: var(--yes-bg); color: var(--yes-text); }
+    .r-maybe .chip-badge { background: var(--maybe-bg); color: var(--maybe-text); }
+
+    /* ── PROSE (privacy/about) ── */
+    .prose h2 {
+      font-family: var(--ff-display);
+      font-size: 22px; font-weight: 400; color: var(--text);
+      margin: 36px 0 12px;
+    }
+    .prose h2:first-child { margin-top: 0; }
+    .prose p {
+      font-size: 15px; font-weight: 300; color: var(--text-2);
+      line-height: 1.8; margin-bottom: 14px;
+    }
+    .prose strong { font-weight: 500; color: var(--text); }
+    .prose ul { list-style: none; display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+    .prose ul li {
+      font-size: 15px; font-weight: 300; color: var(--text-2);
+      line-height: 1.6; padding-left: 18px; position: relative;
+    }
+    .prose ul li::before { content: '—'; position: absolute; left: 0; color: var(--accent); }
+    .prose a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(191,64,96,.3); transition: border-color var(--transition); }
+    .prose a:hover { border-color: var(--accent); }
+
+    /* ── FOOTER ── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 22px 20px; text-align: center;
+      max-width: var(--max); margin: 0 auto; width: 100%;
+    }
+    .footer p { font-size: 12px; color: var(--text-3); font-weight: 300; }
+    .footer a { color: var(--text-2); text-decoration: none; transition: color var(--transition); }
+    .footer a:hover { color: var(--text); }
+
+    /* ── UTILS ── */
+    .divider { height: 1px; background: var(--border); margin: 36px 0; }
+    .t-center { text-align: center; }
+    .t-accent { color: var(--accent); }
+    .t-muted { color: var(--text-2); }
+    .mt-2 { margin-top: 8px; }
+    .mt-3 { margin-top: 12px; }
+    .mt-4 { margin-top: 16px; }
+    .mt-6 { margin-top: 24px; }
+    .mt-8 { margin-top: 32px; }
+    .mt-10 { margin-top: 40px; }
+    .mb-3 { margin-bottom: 12px; }
+    .mb-4 { margin-bottom: 16px; }
+    .inline-link { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(191,64,96,.3); }
+    .inline-link:hover { border-color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeSlide .25s ease forwards; }
+
+    @keyframes popIn {
+      0%   { transform: scale(.94); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .pop-in { animation: popIn .2s cubic-bezier(.22,1,.36,1) forwards; }
+
+    /* ── RESPONSIVE ── */
+    @media (min-width: 480px) {
+      .hero-ctas { flex-direction: row; max-width: 340px; }
+    }
+    @media (max-width: 360px) {
+      .nav-links li:first-child { display: none; }
+      .promise-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fade-in, .pop-in { animation: none; }
+    }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════
+
+const SECTIONS = [
+  {
+    id: 'partners',
+    title: "Who You're Open To",
+    subtitle: 'Partner types and group configurations',
+    questions: [
+      'Soft swap (no penetrative sex with others)',
+      'Full swap (penetrative sex with others)',
+      'Women playing together',
+      'Men playing together',
+      'Threesome — two women, one man',
+      'Threesome — two men, one woman',
+      'Group play (four or more, everyone involved)',
+      'Single women joining',
+      'Single men joining',
+      'People new to the lifestyle',
+    ]
+  },
+  {
+    id: 'connection',
+    title: 'Chemistry & Connection',
+    subtitle: 'How you meet and decide to play',
+    questions: [
+      'Playing on or after first meeting (no prior date needed)',
+      'Social connection required first (friends-before-play)',
+      'Spontaneous connections at events or clubs',
+      'Everyone must be mutually enthusiastic before play begins',
+      'Open to ongoing connections with the same people',
+      'One partner playing independently (solo play dates)',
+    ]
+  },
+  {
+    id: 'setting',
+    title: 'Setting',
+    subtitle: 'Where and how you play',
+    questions: [
+      'Same room, shared play space',
+      'Same room, separate couples (parallel play)',
+      'Separate rooms, same location',
+      'Hosting at home',
+      'Hotel or neutral location',
+      'Lifestyle clubs or on-premise venues',
+      'Lifestyle resorts or destination events',
+      'Watching others play (voyeurism)',
+      'Being watched while playing (exhibitionism)',
+    ]
+  },
+  {
+    id: 'physical',
+    title: "What's On The Table",
+    subtitle: 'Physical activities and preferences',
+    questions: [
+      'Kissing with play partners',
+      'Oral sex with play partners',
+      'Anal play (manual or oral)',
+      'Anal sex',
+      'Toys during play',
+      'Light bondage or restraint',
+      'Role play or fantasy scenarios',
+      'Photos during play',
+      'Videos during play',
+    ]
+  },
+  {
+    id: 'health',
+    title: 'Health & Safety',
+    subtitle: 'Non-negotiables and requirements',
+    questions: [
+      'Barriers required for penetrative sex (always)',
+      'Barriers required for oral sex',
+      'Comfortable with barrier-free play (fluid bonded / tested)',
+      'Recent STI testing required before play',
+      'Sober or low-intoxication play only',
+    ]
+  },
+  {
+    id: 'beyond',
+    title: 'After & Beyond',
+    subtitle: 'How it wraps up and what comes next',
+    questions: [
+      'Cuddling / aftercare with play partners',
+      'Overnights together',
+      'Traveling out of town to play',
+      'Sharing details with partners afterward',
+      'Staying friends / social connection outside of play',
+      'Privacy required — no social media mentions',
+      'Verbal check-ins during play preferred',
+    ]
+  }
+];
+
+// Flatten questions with global indices
+let _gi = 0;
+const QUESTIONS = SECTIONS.flatMap((s, si) =>
+  s.questions.map((text, li) => ({ gi: _gi++, si, li, text }))
+);
+const TOTAL = QUESTIONS.length; // 46
+
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+
+const answers = {}; // gi -> 'Y' | 'M' | 'N'
+
+// ═══════════════════════════════════════════════════════
+//  ENCODING
+// ═══════════════════════════════════════════════════════
+
+function encode(answersObj) {
+  let s = '';
+  for (let i = 0; i < TOTAL; i++) s += answersObj[i] || 'U';
+  return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+function decode(enc) {
+  try {
+    const b64 = enc.replace(/-/g, '+').replace(/_/g, '/');
+    const pad = b64 + '=='.slice(0, (4 - b64.length % 4) % 4);
+    const s = atob(pad);
+    const r = {};
+    for (let i = 0; i < TOTAL && i < s.length; i++) {
+      if ('YMN'.includes(s[i])) r[i] = s[i];
+    }
+    return r;
+  } catch { return null; }
+}
+
+function computeResults(encList) {
+  const all = encList.map(decode).filter(Boolean);
+  if (!all.length) return [];
+  const out = [];
+  SECTIONS.forEach((section, si) => {
+    const items = [];
+    QUESTIONS.filter(q => q.si === si).forEach(q => {
+      const responses = all.map(a => a[q.gi] || null);
+      if (responses.some(r => !r || r === 'N')) return;
+      const unanimous = responses.every(r => r === 'Y');
+      items.push({ text: q.text, unanimous });
+    });
+    if (items.length) out.push({ section, items });
+  });
+  return out;
+}
+
+// ═══════════════════════════════════════════════════════
+//  ROUTER
+// ═══════════════════════════════════════════════════════
+
+function navigate(path) { window.location.hash = path; }
+
+function getRoute() {
+  const h = window.location.hash.slice(1) || '/';
+  const parts = h.split('/').filter(Boolean);
+  return { page: parts[0] || '', rest: parts.slice(1) };
+}
+
+// ═══════════════════════════════════════════════════════
+//  RENDER ENGINE
+// ═══════════════════════════════════════════════════════
+
+function render() {
+  const { page, rest } = getRoute();
+  const app = document.getElementById('app');
+
+  // Remove robots noindex when leaving results
+  const noindex = document.querySelector('meta[name="robots"][content*="noindex"]');
+  if (noindex) noindex.remove();
+
+  let html;
+  switch (page) {
+    case 'survey':    html = pageSurvey(parseInt(rest[0]) || 0); break;
+    case 'share':     html = pageShare(rest[0]); break;
+    case 'aggregate': html = pageAggregate(); break;
+    case 'results':   html = pageResults(rest[0]); break;
+    case 'privacy':   html = pagePrivacy(); break;
+    case 'about':     html = pageAbout(); break;
+    default:          html = pageHome();
+  }
+
+  app.innerHTML = html;
+  app.classList.remove('fade-in');
+  void app.offsetWidth;
+  app.classList.add('fade-in');
+  window.scrollTo(0, 0);
+}
+
+// ═══════════════════════════════════════════════════════
+//  SHARED PARTIALS
+// ═══════════════════════════════════════════════════════
+
+function Nav() {
+  return `<nav class="nav">
+    <a href="#/" class="nav-logo">Discover<em>Consent</em></a>
+    <ul class="nav-links">
+      <li><a href="#/about">About</a></li>
+      <li><a href="#/privacy">Privacy</a></li>
+      <li><a href="https://github.com/discoverconsent/discoverconsent" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
+  </nav>`;
+}
+
+function Footer() {
+  return `<footer class="footer">
+    <p>Open source · No tracking · No data stored ·
+      <a href="#/privacy">Privacy</a> ·
+      <a href="#/about">About</a> ·
+      <a href="https://github.com/discoverconsent/discoverconsent" target="_blank" rel="noopener">GitHub</a>
+    </p>
+  </footer>`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  HOME
+// ═══════════════════════════════════════════════════════
+
+function pageHome() {
+  return `${Nav()}
+  <main class="page">
+    <section class="hero fade-in">
+      <div class="eyebrow">Private · Anonymous · No accounts</div>
+      <h1 class="display">Find your<br><em>common ground</em></h1>
+      <p class="hero-body mt-4">
+        A private tool for honest conversations about what you're open to.
+        No accounts. No emails. No data stored — ever.
+      </p>
+      <div class="hero-ctas">
+        <a href="#/survey/0" class="btn btn-primary btn-full">Start the Survey</a>
+        <a href="#/aggregate" class="btn btn-ghost btn-full">Combine Results</a>
+      </div>
+    </section>
+
+    <section>
+      <p class="label">How it works</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-line"></div>
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Each person takes the survey privately</div>
+            <div class="step-desc">46 questions across 6 topics. Your answers stay in your browser — never sent to any server.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-line"></div>
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Share your unique link with the group</div>
+            <div class="step-desc">You get an encoded link containing your answers. Share it via text, Telegram, Signal — whatever works.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">See only what everyone agreed on</div>
+            <div class="step-desc">Paste all links to see mutual yes and maybe answers. No's are completely invisible — no one knows who said no to what.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section>
+      <p class="label">Our privacy promise</p>
+      <div class="promise-grid">
+        ${[
+          'No accounts or sign-up required',
+          'No emails collected — ever',
+          'No cookies or tracking pixels',
+          'Answers exist only in your URL',
+          'Open source — verify the code',
+          'No\'s are never shown to anyone',
+        ].map(t => `<div class="promise-item"><div class="promise-dot"></div><span class="promise-text">${t}</span></div>`).join('')}
+      </div>
+      <p class="t-center mt-4"><a href="#/privacy" class="inline-link">Read the full privacy policy →</a></p>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="t-center">
+      <div class="badge-row">
+        <span class="badge">Open Source</span>
+        <span class="badge">MIT License</span>
+        <span class="badge">Zero Data</span>
+        <span class="badge">46 Questions</span>
+      </div>
+      <p class="body-sm mt-4" style="max-width:380px;margin-left:auto;margin-right:auto;">
+        Built with the lifestyle community. Useful for any couple or group navigating honest conversations about intimacy and shared preferences.
+      </p>
+      <div class="mt-6">
+        <a href="#/survey/0" class="btn btn-primary">Start the Survey →</a>
+      </div>
+    </section>
+  </main>
+  ${Footer()}`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  SURVEY
+// ═══════════════════════════════════════════════════════
+
+function pageSurvey(si) {
+  si = Math.max(0, Math.min(si, SECTIONS.length - 1));
+  const section = SECTIONS[si];
+  const sectionQs = QUESTIONS.filter(q => q.si === si);
+  const answeredHere = sectionQs.filter(q => answers[q.gi]).length;
+  const sectionDone = answeredHere === sectionQs.length;
+  const totalAnswered = Object.keys(answers).length;
+  const pct = Math.round((totalAnswered / TOTAL) * 100);
+  const isLast = si === SECTIONS.length - 1;
+
+  const pills = SECTIONS.map((_, i) => {
+    const qs = QUESTIONS.filter(q => q.si === i);
+    const done = qs.every(q => answers[q.gi]);
+    const active = i === si;
+    return `<div class="section-pill ${done ? 'done' : active ? 'active' : ''}"></div>`;
+  }).join('');
+
+  const qRows = sectionQs.map(q => {
+    const cur = answers[q.gi];
+    return `<div class="question-item">
+      <div class="question-text">${q.text}</div>
+      <div class="answer-group">
+        <button class="answer-btn ${cur === 'Y' ? 'sel-Y' : ''}" data-a="answer" data-qi="${q.gi}" data-val="Y">Yes</button>
+        <button class="answer-btn ${cur === 'M' ? 'sel-M' : ''}" data-a="answer" data-qi="${q.gi}" data-val="M">Maybe</button>
+        <button class="answer-btn ${cur === 'N' ? 'sel-N' : ''}" data-a="answer" data-qi="${q.gi}" data-val="N">No</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const remaining = sectionQs.length - answeredHere;
+  const hintText = sectionDone
+    ? '✓ Section complete — you can continue'
+    : `${remaining} question${remaining !== 1 ? 's' : ''} left in this section`;
+
+  return `${Nav()}
+  <div class="survey-header">
+    <div class="survey-meta">
+      <span class="label">Section ${si + 1} of ${SECTIONS.length}</span>
+      <span class="label">${totalAnswered} / ${TOTAL} answered</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="prog" style="width:${pct}%"></div>
+    </div>
+    <div class="section-pills mt-2">${pills}</div>
+  </div>
+
+  <main class="page">
+    <div class="section-intro">
+      <div class="section-num">${section.subtitle}</div>
+      <h2 class="section-title">${section.title}</h2>
+    </div>
+
+    <div class="questions-list" id="qlist">${qRows}</div>
+
+    <div class="survey-nav">
+      ${si > 0 ? `<button class="btn btn-ghost" data-a="back" data-si="${si}">← Back</button>` : ''}
+      ${isLast
+        ? `<button class="btn btn-primary" id="finish-btn" data-a="finish" ${sectionDone ? '' : 'disabled'}>Get My Link</button>`
+        : `<button class="btn btn-primary" id="next-btn" data-a="next" data-si="${si}" ${sectionDone ? '' : 'disabled'}>Continue →</button>`
+      }
+    </div>
+    <p class="survey-hint ${sectionDone ? 'ok' : ''}" id="hint">${hintText}</p>
+  </main>
+  ${Footer()}`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  SHARE
+// ═══════════════════════════════════════════════════════
+
+function pageShare(encoded) {
+  if (!encoded) { navigate('/survey/0'); return ''; }
+  const origin = window.location.origin + window.location.pathname;
+  const shareUrl = `${origin}#/share/${encoded}`;
+
+  return `${Nav()}
+  <main class="page">
+    <div class="t-center mt-10 fade-in">
+      <div style="width:60px;height:60px;border-radius:50%;background:var(--yes-bg);border:1px solid var(--yes);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:24px;color:var(--yes-text);">✓</div>
+      <h2 class="heading">Your answers are ready</h2>
+      <p class="body-sm mt-4" style="max-width:400px;margin-left:auto;margin-right:auto;">
+        This link contains your encoded answers. Share it with your group however you like.
+        No one can see your individual responses — only the mutual results.
+      </p>
+    </div>
+
+    <div class="card mt-8">
+      <p class="label mb-3">Your share link</p>
+      <div class="share-link-box" id="share-url">${shareUrl}</div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="btn btn-primary" style="flex:1;" data-a="copy" data-url="${shareUrl}" id="copy-btn">Copy Link</button>
+        <span class="copy-confirm" id="copy-ok">✓ Copied</span>
+      </div>
+    </div>
+
+    <div class="card card-accent card-sm mt-4">
+      <p style="font-size:13px;color:var(--text-2);font-weight:300;line-height:1.65;">
+        <strong style="color:var(--text);">Save this now.</strong> Your answers exist only in this link.
+        If you close this page without copying, you'll need to retake the survey.
+      </p>
+    </div>
+
+    <div class="card mt-6">
+      <p class="label mb-4">What happens next</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-line"></div>
+          <div class="step-num" style="font-size:11px">1</div>
+          <div class="step-content">
+            <div class="step-title">Share this link with your group</div>
+            <div class="step-desc">Send via Telegram, iMessage, Signal — whatever your group uses.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-line"></div>
+          <div class="step-num" style="font-size:11px">2</div>
+          <div class="step-content">
+            <div class="step-title">Everyone takes the survey</div>
+            <div class="step-desc">Each person gets their own unique share link when done.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="font-size:11px">3</div>
+          <div class="step-content">
+            <div class="step-title">Paste all links into the results page</div>
+            <div class="step-desc">The page shows only what everyone agreed on. No's stay hidden.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:24px;">
+      <a href="#/aggregate" class="btn btn-ghost btn-full">Go to Results Page →</a>
+      <a href="#/survey/0" class="btn btn-ghost btn-full" style="font-size:13px;color:var(--text-3)">Retake the Survey</a>
+    </div>
+  </main>
+  ${Footer()}`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  AGGREGATE
+// ═══════════════════════════════════════════════════════
+
+function pageAggregate() {
+  return `${Nav()}
+  <main class="page">
+    <div style="padding-top:48px;">
+      <p class="label accent">Combine results</p>
+      <h2 class="heading mt-4">See what everyone agrees on</h2>
+      <p class="body-sm mt-4">
+        Paste each person's share link below — one per line.
+        You'll get a results permalink showing only the mutual agreements.
+      </p>
+    </div>
+
+    <div class="mt-8">
+      <p class="label mb-3">Share links (one per line, 2–10 people)</p>
+      <textarea class="agg-textarea" id="links-in"
+        placeholder="https://discoverconsent.com/#/share/abc123&#10;https://discoverconsent.com/#/share/def456&#10;https://discoverconsent.com/#/share/ghi789"></textarea>
+      <p class="agg-error" id="agg-err">Could not find valid share links. Paste the full URLs from each person's share page.</p>
+    </div>
+
+    <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px;">
+      <button class="btn btn-primary btn-full" data-a="compute">See What We All Agree On →</button>
+      <p style="font-size:12px;color:var(--text-3);text-align:center;font-weight:300;">
+        Computed entirely in your browser. Nothing is sent to any server.
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="card card-sm">
+      <p class="label mb-3">How results work</p>
+      <p class="body-sm">
+        An item shows up only if <strong style="color:var(--text)">every participant</strong> answered Yes or Maybe.
+        If anyone said No — or didn't answer — that item is hidden entirely.
+        No one can tell who said No to what.
+      </p>
+      <div class="results-meta mt-3">
+        <span class="meta-pill"><span class="meta-dot yes"></span>All said Yes</span>
+        <span class="meta-pill"><span class="meta-dot maybe"></span>Includes some Maybes</span>
+      </div>
+    </div>
+
+    <div class="card card-sm mt-4">
+      <p class="label mb-3">Don't have your link?</p>
+      <p class="body-sm" style="margin-bottom:12px;">Take the survey first to get your share link.</p>
+      <a href="#/survey/0" class="btn btn-ghost btn-sm">Take the Survey →</a>
+    </div>
+  </main>
+  ${Footer()}`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  RESULTS
+// ═══════════════════════════════════════════════════════
+
+function pageResults(encodedStr) {
+  if (!encodedStr) { navigate('/aggregate'); return ''; }
+
+  // Noindex results pages
+  const m = document.createElement('meta');
+  m.name = 'robots'; m.content = 'noindex, nofollow';
+  document.head.appendChild(m);
+
+  const encList = encodedStr.split('.').filter(Boolean);
+  const results = computeResults(encList);
+  const total = results.reduce((s, r) => s + r.items.length, 0);
+  const pCount = encList.length;
+  const origin = window.location.origin + window.location.pathname;
+  const resultsUrl = `${origin}#/results/${encodedStr}`;
+
+  if (!results.length) {
+    return `${Nav()}
+    <main class="page">
+      <div class="t-center mt-10">
+        <h2 class="heading">No mutual matches</h2>
+        <p class="body-sm mt-4" style="max-width:360px;margin:16px auto 0;">
+          There were no items that all ${pCount} participant${pCount!==1?'s':''} answered Yes or Maybe to.
+          That's valuable information — there's more to explore and discuss together.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:10px;max-width:280px;margin:28px auto 0;">
+          <a href="#/aggregate" class="btn btn-ghost btn-full">← Try Again</a>
+          <a href="#/survey/0" class="btn btn-ghost btn-full">Retake the Survey</a>
+        </div>
+      </div>
+    </main>
+    ${Footer()}`;
+  }
+
+  const sections = results.map(({ section, items }) => `
+    <div class="results-section">
+      <div class="results-section-head">
+        <span class="results-section-title">${section.title}</span>
+        <span class="result-count">${items.length}</span>
+      </div>
+      <div class="results-chips">
+        ${items.map(item => `
+          <div class="result-chip ${item.unanimous ? 'r-yes' : 'r-maybe'} pop-in">
+            <div class="chip-dot"></div>
+            <span class="chip-text">${item.text}</span>
+            <span class="chip-badge">${item.unanimous ? 'Yes' : 'Maybe'}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  return `${Nav()}
+  <main class="page">
+    <div style="padding-top:40px;">
+      <p class="label accent">${pCount} participant${pCount!==1?'s':''} · ${total} match${total!==1?'es':''}</p>
+      <h2 class="heading mt-4">Your common ground</h2>
+      <div class="results-meta mt-3">
+        <span class="meta-pill"><span class="meta-dot yes"></span>All said Yes</span>
+        <span class="meta-pill"><span class="meta-dot maybe"></span>Includes Maybes</span>
+      </div>
+    </div>
+
+    ${sections}
+
+    <div class="divider"></div>
+
+    <div class="card card-sm mb-3">
+      <p class="label mb-3">Share these results</p>
+      <p class="body-sm" style="margin-bottom:10px;">
+        This URL is a permanent results link — anyone with it can view the same results.
+      </p>
+      <div class="share-link-box" style="font-size:11px;">${resultsUrl}</div>
+      <button class="btn btn-ghost btn-full btn-sm mt-2" data-a="copy" data-url="${resultsUrl}" id="copy-btn">Copy Results Link</button>
+      <span class="copy-confirm" id="copy-ok">✓ Copied</span>
+    </div>
+
+    <div class="card card-sm" style="text-align:center;margin-bottom:16px;">
+      <p style="font-size:12px;color:var(--text-3);font-weight:300;line-height:1.7;">
+        No names. No attribution. No server logged this page.<br>
+        All computation happened in your browser.
+      </p>
+    </div>
+
+    <div style="display:flex;gap:10px;">
+      <a href="#/survey/0" class="btn btn-ghost" style="flex:1;font-size:13px;">Retake Survey</a>
+      <a href="#/aggregate" class="btn btn-ghost" style="flex:1;font-size:13px;">New Results</a>
+    </div>
+  </main>
+  ${Footer()}`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  PRIVACY
+// ═══════════════════════════════════════════════════════
+
+function pagePrivacy() {
+  const updated = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  return `${Nav()}
+  <main class="page">
+    <div style="padding-top:48px;">
+      <p class="label accent">Legal</p>
+      <h1 class="heading mt-4">Privacy Policy</h1>
+      <p class="body-sm mt-3">Last updated: ${updated}</p>
+    </div>
+    <div class="divider"></div>
+    <div class="prose">
+      <h2>The short version</h2>
+      <p>We collect nothing. We store nothing. We know nothing about you. This is not legal boilerplate — it is a technical fact you can verify in our open-source code.</p>
+
+      <h2>What we don't collect</h2>
+      <ul>
+        <li>No email addresses or usernames</li>
+        <li>No account information of any kind</li>
+        <li>No cookies — not even session cookies</li>
+        <li>No analytics or tracking scripts</li>
+        <li>No advertising pixels or networks</li>
+        <li>No device fingerprinting</li>
+        <li>No location data</li>
+        <li>No survey answers — ever</li>
+      </ul>
+
+      <h2>How your answers are stored</h2>
+      <p>Your survey answers are encoded directly into the URL you copy and share. They never transit our systems. The web server receives only a request for a static HTML file. Because your answers live in the URL fragment (the part after <strong>#</strong>), browsers do not include that in the HTTP request — the server literally cannot see it.</p>
+      <p>When you combine links on the results page, the computation runs entirely inside your browser using JavaScript. No data is transmitted anywhere during this step.</p>
+
+      <h2>What the server does see</h2>
+      <p>Standard HTTP request logs: timestamp, your IP address, and that a file was served. This is identical to any static website. These logs may be retained up to 30 days for security purposes, but contain no information about your answers, identity, or group.</p>
+
+      <h2>Third-party services</h2>
+      <p>We use <strong>Google Fonts</strong> to load typefaces. This sends a request to Google's servers to retrieve font files. If this concerns you, blocking external font requests does not affect the site's functionality.</p>
+      <p>We use no advertising networks, analytics platforms, social media widgets, or any other third-party data collection service.</p>
+
+      <h2>Results links</h2>
+      <p>Results URLs contain encoded answer data within the URL fragment. Anyone who receives a results link can view those results. Share results links only with people you intend to see them. We do not index results pages in search engines.</p>
+
+      <h2>Open source</h2>
+      <p>The entire codebase is publicly available at <a href="https://github.com/discoverconsent/discoverconsent" target="_blank" rel="noopener">github.com/discoverconsent/discoverconsent</a>. Read the code, verify our claims, run your own copy.</p>
+
+      <h2>Changes</h2>
+      <p>If we ever change how data is handled, we will update this page and note the date. The history of this policy is always visible in the repository's commit log.</p>
+
+      <h2>Contact</h2>
+      <p>Privacy questions can be raised publicly in our <a href="https://github.com/discoverconsent/discoverconsent/issues" target="_blank" rel="noopener">GitHub Issues</a>.</p>
+    </div>
+  </main>
+  ${Footer()}`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  ABOUT
+// ═══════════════════════════════════════════════════════
+
+function pageAbout() {
+  return `${Nav()}
+  <main class="page">
+    <div style="padding-top:48px;">
+      <p class="label accent">About</p>
+      <h1 class="heading mt-4">What is Discover Consent?</h1>
+    </div>
+    <div class="divider"></div>
+    <div class="prose">
+      <h2>The idea</h2>
+      <p>Discover Consent is a free, open-source tool for honest conversations about intimacy and shared preferences. It's designed for couples and groups who want to surface their common ground privately — before diving into any conversation, not after.</p>
+
+      <h2>How it works</h2>
+      <p>Each person answers 46 questions privately across six topics: who you're open to, how you connect, where you play, what's on the table, health and safety, and aftercare. When everyone is done, share links are combined to reveal only the mutual agreements — the things everyone said Yes or Maybe to.</p>
+      <p>No's are completely invisible. No one knows who said No to what. The results show only your common ground.</p>
+
+      <h2>Who it's for</h2>
+      <p>Built with the lifestyle community in mind, Discover Consent is useful for anyone navigating honest conversations — new couples exploring together, established groups coordinating before an event, or anyone who wants a structured, private way to surface shared interests without the awkwardness of asking directly.</p>
+
+      <h2>Privacy as a feature</h2>
+      <p>No accounts. No emails. No cookies. No tracking. Your answers live only in the URL you choose to share. The server has no knowledge of your responses. This isn't a promise — it's a technical fact you can verify in the open-source code.</p>
+
+      <h2>Open source</h2>
+      <p>Discover Consent is MIT licensed and fully open source. Run your own copy, suggest questions, report issues, or contribute at <a href="https://github.com/discoverconsent/discoverconsent" target="_blank" rel="noopener">github.com/discoverconsent/discoverconsent</a>.</p>
+    </div>
+    <div class="t-center mt-8">
+      <a href="#/survey/0" class="btn btn-primary">Take the Survey →</a>
+    </div>
+  </main>
+  ${Footer()}`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  EVENTS
+// ═══════════════════════════════════════════════════════
+
+document.addEventListener('click', function(e) {
+  const el = e.target.closest('[data-a]');
+  if (!el) return;
+  const a = el.dataset.a;
+
+  // ── Answer button ──
+  if (a === 'answer') {
+    const qi = parseInt(el.dataset.qi);
+    const val = el.dataset.val;
+    answers[qi] = val;
+
+    // Update sibling buttons
+    el.closest('.answer-group').querySelectorAll('.answer-btn').forEach(b => {
+      b.className = 'answer-btn' + (b.dataset.val === val ? ` sel-${val}` : '');
+    });
+
+    // Update continue/finish button state
+    const actionBtn = document.querySelector('[data-a="next"], [data-a="finish"]');
+    if (actionBtn) {
+      const si = parseInt(actionBtn.closest('main')?.querySelector('[data-si]')?.dataset.si
+        ?? actionBtn.dataset.si ?? 0);
+      const sqs = QUESTIONS.filter(q => q.si === si);
+      const done = sqs.every(q => answers[q.gi]);
+      actionBtn.disabled = !done;
+
+      const hint = document.getElementById('hint');
+      if (hint) {
+        const rem = sqs.length - sqs.filter(q => answers[q.gi]).length;
+        hint.textContent = done ? '✓ Section complete — you can continue'
+          : `${rem} question${rem!==1?'s':''} left in this section`;
+        hint.className = 'survey-hint' + (done ? ' ok' : '');
+      }
+    }
+
+    // Update progress bar live
+    const prog = document.getElementById('prog');
+    if (prog) {
+      const pct = Math.round((Object.keys(answers).length / TOTAL) * 100);
+      prog.style.width = pct + '%';
+      const meta = document.querySelector('.survey-meta .label:last-child');
+      if (meta) meta.textContent = `${Object.keys(answers).length} / ${TOTAL} answered`;
+    }
+    return;
+  }
+
+  // ── Survey navigation ──
+  if (a === 'back') {
+    navigate(`/survey/${parseInt(el.dataset.si) - 1}`);
+    return;
+  }
+  if (a === 'next') {
+    const si = parseInt(el.dataset.si);
+    const sqs = QUESTIONS.filter(q => q.si === si);
+    if (sqs.every(q => answers[q.gi])) navigate(`/survey/${si + 1}`);
+    return;
+  }
+  if (a === 'finish') {
+    const si = SECTIONS.length - 1;
+    const sqs = QUESTIONS.filter(q => q.si === si);
+    if (sqs.every(q => answers[q.gi])) navigate(`/share/${encode(answers)}`);
+    return;
+  }
+
+  // ── Copy link ──
+  if (a === 'copy') {
+    const url = el.dataset.url;
+    const btn = el;
+    const ok = document.getElementById('copy-ok');
+    navigator.clipboard.writeText(url).then(() => {
+      btn.textContent = '✓ Copied!';
+      if (ok) ok.classList.add('show');
+      setTimeout(() => {
+        btn.textContent = btn === document.getElementById('copy-btn') ? 'Copy Link' : 'Copy Results Link';
+        if (ok) ok.classList.remove('show');
+      }, 2500);
+    }).catch(() => {
+      // Fallback: select the text
+      const box = document.querySelector('.share-link-box');
+      if (box) {
+        const sel = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(box);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    });
+    return;
+  }
+
+  // ── Compute results ──
+  if (a === 'compute') {
+    const ta = document.getElementById('links-in');
+    const err = document.getElementById('agg-err');
+    if (!ta) return;
+    const raw = ta.value.trim();
+    err.classList.remove('show');
+
+    if (!raw) {
+      err.textContent = 'Please paste at least one share link.';
+      err.classList.add('show');
+      return;
+    }
+
+    const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+    const encs = [];
+    for (const line of lines) {
+      const m = line.match(/#\/share\/([A-Za-z0-9_-]+)/);
+      if (m) { encs.push(m[1]); continue; }
+      if (/^[A-Za-z0-9_-]{20,}$/.test(line)) { encs.push(line); continue; }
+    }
+
+    if (!encs.length) {
+      err.textContent = 'No valid share links found. Paste full URLs from each person\'s share page.';
+      err.classList.add('show');
+      ta.focus();
+      return;
+    }
+
+    navigate(`/results/${encs.join('.')}`);
+    return;
+  }
+});
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+
+window.addEventListener('hashchange', render);
+render();
+</script>
+</body>
+</html>
