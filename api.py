@@ -16,7 +16,7 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 SESSIONS_DIR = '/var/www/discoverconsent/sessions'
-SESSION_TTL  = 48 * 3600   # 48 hours in seconds
+SESSION_TTL  = 7 * 24 * 3600  # 7 days in seconds
 MAX_PARTICIPANTS = 10
 CODE_LEN = 6
 
@@ -95,10 +95,13 @@ def create_session():
     for _ in range(30):
         code = ''.join(random.choices(chars, k=CODE_LEN))
         if not os.path.exists(session_path(code)):
-            data = {
+            body   = request.get_json(silent=True) or {}
+            opt_in = bool(body.get('opt_in', False))
+            data   = {
                 'code': code,
                 'created': time.time(),
-                'answers': []
+                'answers': [],
+                'opt_in': opt_in
             }
             save_session(data)
             return jsonify({'code': code})

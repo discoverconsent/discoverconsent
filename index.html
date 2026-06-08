@@ -255,6 +255,13 @@
     .prose a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(191,64,96,.3); }
     .prose a:hover { border-color: var(--accent); }
 
+    /* OPT-IN CHECKBOX */
+    .opt-in-row { display: flex; align-items: flex-start; gap: 12px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 14px 16px; cursor: pointer; transition: border-color var(--tr); }
+    .opt-in-row:hover { border-color: var(--border-2); }
+    .opt-in-cb { width: 18px; height: 18px; min-width: 18px; margin-top: 2px; accent-color: var(--accent); cursor: pointer; }
+    .opt-in-text { font-size: 14px; color: var(--text); font-weight: 400; line-height: 1.5; }
+    .opt-in-sub { font-size: 12px; color: var(--text-2); font-weight: 300; margin-top: 4px; line-height: 1.4; }
+
     /* FOOTER */
     .footer { border-top: 1px solid var(--border); padding: 22px 20px; text-align: center; max-width: var(--max); margin: 0 auto; width: 100%; }
     .footer p { font-size: 12px; color: var(--text-3); font-weight: 300; }
@@ -426,7 +433,7 @@ function computeResults(encList) {
     QUESTIONS.filter(q => q.si === si).forEach(q => {
       const responses = all.map(a => a[q.gi] || null);
       if (responses.some(r => !r || r === 'N')) return;
-      items.push({ text: q.text, unanimous: responses.every(r => r === 'Y') });
+      items.push({ gi: q.gi, text: q.text, unanimous: responses.every(r => r === 'Y') });
     });
     if (items.length) out.push({ section, items });
   });
@@ -453,6 +460,7 @@ function render() {
   let html;
 
   switch (page) {
+    case 'saved':    html = pageSaved(rest[0]);                      break;
     case 'create':   html = pageCreate();                          break;
     case 'join':     html = rest[0] ? pageJoinStart(rest[0]) : pageJoin(); break;
     case 'session':  html = pageSession(rest[0]);                  break;
@@ -475,7 +483,6 @@ function render() {
   document.body.scrollTop = 0;
 
   // Post-render hooks
-  if (page === 'create')  initCreate();
   if (page === 'session') initSession(rest[0]);
 }
 
@@ -510,6 +517,16 @@ function SafetyNote() {
   </div>`;
 }
 
+function generateShareText(results) {
+  let t = 'Our common ground — discoverconsent.com\n\n';
+  results.forEach(({section, items}) => {
+    t += `${section.title}\n`;
+    items.forEach(i => { t += `  · ${i.text}\n`; });
+    t += '\n';
+  });
+  return t.trim();
+}
+
 function ResultsHTML(results, participantCount) {
   const total = results.reduce((s,r) => s + r.items.length, 0);
   if (!results.length) return `
@@ -519,6 +536,11 @@ function ResultsHTML(results, participantCount) {
         There aren't any items that all ${participantCount} participant${participantCount!==1?'s':''} agreed on. More submissions may change that.
       </p>
     </div>`;
+
+  // Build saved URL from matched question indices
+  const allIndices = results.flatMap(r => r.items.map(i => i.gi));
+  const savedUrl   = `${window.location.origin}${window.location.pathname}#/saved/${allIndices.join('.')}`;
+  const shareText  = generateShareText(results);
 
   return `
     <div style="padding-top:16px;">
@@ -543,7 +565,17 @@ function ResultsHTML(results, participantCount) {
               <span class="chip-badge">${item.unanimous?'Yes':'Maybe'}</span>
             </div>`).join('')}
         </div>
-      </div>`).join('')}`;
+      </div>`).join('')}
+    <div class="divider"></div>
+    <div class="card card-sm">
+      <p class="label mb-3">Save your results</p>
+      <p class="body-sm" style="margin-bottom:12px;">This link shows only your matched items — no encoded answers. It works forever, even after the session expires.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" data-a="share-results" data-url="${savedUrl}" data-text="${encodeURIComponent(shareText)}">Share</button>
+        <button class="btn btn-ghost btn-sm" data-a="copy" data-url="${savedUrl}" id="copy-save-btn">Copy Link</button>
+        <button class="btn btn-ghost btn-sm" data-a="copy-text" data-results="${encodeURIComponent(shareText)}">Copy as Text</button>
+      </div>
+    </div>`;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -600,7 +632,7 @@ function pageHome() {
     <section>
       <p class="label">Our privacy promise</p>
       <div class="promise-grid">
-        ${['No accounts or emails — ever','No cookies or tracking pixels','Session data is anonymous encoded strings','Sessions auto-delete after 48 hours','No\'s are never shown to anyone','Open source — verify everything'].map(t => `<div class="promise-item"><div class="promise-dot"></div><span class="promise-text">${t}</span></div>`).join('')}
+        ${['No accounts or emails — ever','No cookies or tracking pixels','Session data is anonymous encoded strings','Sessions auto-delete after 7 days','No\'s are never shown to anyone','Open source — verify everything'].map(t => `<div class="promise-item"><div class="promise-dot"></div><span class="promise-text">${t}</span></div>`).join('')}
       </div>
       <p class="t-center mt-4"><a href="#/privacy" class="inline-link">Read the full privacy policy →</a></p>
     </section>
@@ -629,52 +661,94 @@ function pageHome() {
 function pageCreate() {
   return `${Nav()}
   <main class="page">
-    <div style="padding-top:56px; text-align:center;">
+    <div style="padding-top:48px;">
       <p class="label accent">New session</p>
-      <h2 class="heading mt-4">Creating your session…</h2>
+      <h2 class="heading mt-4">Create a Session</h2>
+      <p class="body-sm mt-4">Everyone in your group takes the survey privately. Results appear automatically as people submit — no link collecting.</p>
     </div>
-    <div id="create-body" style="margin-top:32px; text-align:center;">
-      <div class="spinner"></div>
+
+    <div id="create-body" style="margin-top:28px;">
+      <label class="opt-in-row" for="opt-in-cb">
+        <input type="checkbox" id="opt-in-cb" class="opt-in-cb">
+        <div>
+          <div class="opt-in-text">Contribute anonymous data to community insights</div>
+          <div class="opt-in-sub">If checked, anonymous question-by-question counts from this session will be aggregated when it expires. No individual answers are stored or linked to anyone. Opt-in is off by default.</div>
+        </div>
+      </label>
+      <button class="btn btn-primary btn-full mt-6" data-a="create-submit">Create Session →</button>
+      <p class="agg-error" id="create-error" style="margin-top:8px;"></p>
     </div>
   </main>
   ${Footer()}`;
 }
 
-function initCreate() {
-  fetch('/api/session/create', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'}
-  })
-  .then(r => r.json())
-  .then(data => {
-    if (data.error) throw new Error(data.error);
-    const code = data.code;
-    const shareUrl = `${window.location.origin}${window.location.pathname}#/join/${code}`;
-    const el = document.getElementById('create-body');
-    if (!el) return;
-    el.innerHTML = `
-      <div class="card" style="text-align:left;">
-        <p class="label mb-3">Your session code</p>
-        <div class="session-code">${code}</div>
-        <p class="body-sm t-center mt-3">Share this code or the link below with your group</p>
-        <div class="share-link-box mt-4" id="create-url">${shareUrl}</div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <button class="btn btn-ghost" style="flex:1;" data-a="copy" data-url="${shareUrl}" id="copy-btn">Copy Link</button>
-          <span class="copy-confirm" id="copy-ok">✓ Copied</span>
-        </div>
-      </div>
-      <div class="card card-yes mt-4" style="text-align:left;">
-        <p class="label mb-3">Now take the survey yourself</p>
-        <p class="body-sm" style="margin-bottom:14px;">Your answers will be submitted directly to this session when you finish.</p>
-        <a href="#/join/${code}" class="btn btn-primary btn-full">Start the Survey →</a>
-      </div>
-      <a href="#/session/${code}" class="btn btn-ghost btn-full mt-4" style="font-size:13px;">View Session Results →</a>
-    `;
-  })
-  .catch(err => {
-    const el = document.getElementById('create-body');
-    if (el) el.innerHTML = `<p style="color:var(--accent);font-size:14px;">Could not create session. Check your connection and try again.<br><a href="#/create" class="inline-link">Retry</a></p>`;
+// ═══════════════════════════════════════════════════════
+//  SAVED RESULTS (permanent link encoding matched indices)
+// ═══════════════════════════════════════════════════════
+
+function pageSaved(indicesStr) {
+  if (!indicesStr) { navigate('/'); return ''; }
+  const m = document.createElement('meta');
+  m.name = 'robots'; m.content = 'noindex,nofollow';
+  document.head.appendChild(m);
+
+  const indices = indicesStr.split('.').map(Number)
+    .filter(n => !isNaN(n) && n >= 0 && n < TOTAL);
+  if (!indices.length) { navigate('/'); return ''; }
+
+  const bySec = {};
+  indices.forEach(gi => {
+    const q = QUESTIONS.find(q => q.gi === gi);
+    if (!q) return;
+    if (!bySec[q.si]) bySec[q.si] = [];
+    bySec[q.si].push(q);
   });
+
+  const savedUrl  = `${window.location.origin}${window.location.pathname}#/saved/${indicesStr}`;
+  const shareText = Object.entries(bySec).map(([si, qs]) =>
+    `${SECTIONS[parseInt(si)].title}\n${qs.map(q => `  · ${q.text}`).join('\n')}`
+  ).join('\n\n') + '\n\ndiscoverconsent.com';
+
+  const sectionsHtml = Object.entries(bySec).map(([si, qs]) => `
+    <div class="results-section">
+      <div class="results-section-head">
+        <span class="results-section-title">${SECTIONS[parseInt(si)].title}</span>
+        <span class="result-count">${qs.length}</span>
+      </div>
+      <div class="results-chips">
+        ${qs.map(q => `
+          <div class="result-chip r-yes pop-in">
+            <div class="chip-dot"></div>
+            <span class="chip-text">${q.text}</span>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  return `${Nav()}
+  <main class="page">
+    <div style="padding-top:40px;">
+      <p class="label accent">Saved results</p>
+      <h2 class="heading mt-4">Your common ground</h2>
+      <p class="body-sm mt-3">${indices.length} matched item${indices.length!==1?'s':''} · This page works forever — bookmark it or share it.</p>
+    </div>
+    ${sectionsHtml}
+    <div class="divider"></div>
+    <div class="card card-sm">
+      <p class="label mb-3">Share this page</p>
+      <div class="share-link-box" style="font-size:11px;">${savedUrl}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+        <button class="btn btn-primary btn-sm" data-a="share-results" data-url="${savedUrl}" data-text="${encodeURIComponent(shareText)}">Share</button>
+        <button class="btn btn-ghost btn-sm" data-a="copy" data-url="${savedUrl}" id="copy-btn">Copy Link</button>
+        <button class="btn btn-ghost btn-sm" data-a="copy-text" data-results="${encodeURIComponent(shareText)}">Copy as Text</button>
+        <span class="copy-confirm" id="copy-ok">✓ Copied</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <a href="#/create" class="btn btn-ghost" style="flex:1;font-size:13px;">New Session</a>
+      <a href="#/" class="btn btn-ghost" style="flex:1;font-size:13px;">Home</a>
+    </div>
+  </main>
+  ${Footer()}`;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -754,7 +828,7 @@ function pageSession(code) {
 
     <div class="card card-sm" style="text-align:center;">
       <p style="font-size:12px;color:var(--text-3);font-weight:300;line-height:1.7;">
-        Session expires 48 hours after creation.<br>
+        Session expires 7 days after creation.<br>
         No names. No attribution. All answers are anonymous.
       </p>
     </div>
@@ -787,14 +861,24 @@ function fetchSessionResults(code) {
       const el = document.getElementById('session-results');
       if (!el) { stopPolling(); return; }
 
-      const count = data.count;
-      const answers = data.answers || [];
+      const count      = data.count;
+      const answers    = data.answers || [];
+      const expiresIn  = data.expires_in || 0;
+
+      function fmtExpiry(s) {
+        if (s <= 0) return 'Expired';
+        const d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600);
+        if (d > 0) return `${d} day${d!==1?'s':''}, ${h} hr${h!==1?'s':''} remaining`;
+        const m = Math.floor((s % 3600) / 60);
+        return `${h} hr${h!==1?'s':''}, ${m} min remaining`;
+      }
 
       let html = `
         <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px;">
           <span class="participant-count">${count}</span>
           <span style="font-size:13px;color:var(--text-2);">participant${count!==1?'s':''} submitted</span>
-        </div>`;
+        </div>
+        <p style="font-size:12px;color:var(--text-3);font-weight:300;margin-bottom:16px;">${fmtExpiry(expiresIn)}</p>`;
 
       if (count < 2) {
         html += `<p class="body-sm mt-4">Waiting for at least one more person to submit before results can be shown.</p>
@@ -883,6 +967,9 @@ function pageSurvey(si, sessionCode) {
       }
     </div>
     <p class="survey-hint ${sectionDone?'ok':''}" id="hint">${hintText}</p>
+    <div class="t-center" style="margin-top:8px;padding-bottom:20px;">
+      <button class="btn btn-ghost btn-sm" data-a="start-over" data-session="${sc}" style="font-size:12px;color:var(--text-3);height:32px;padding:0 12px;">Start Over</button>
+    </div>
   </main>
   ${Footer()}`;
 }
@@ -998,7 +1085,7 @@ function pagePrivacy() {
     <div class="divider"></div>
     <div class="prose">
       <h2>The short version</h2>
-      <p>We collect nothing that identifies you. We store nothing that links back to a person. Session data is anonymous encoded strings that auto-delete after 48 hours.</p>
+      <p>We collect nothing that identifies you. We store nothing that links back to a person. Session data is anonymous encoded strings that auto-delete after 7 days.</p>
 
       <h2>What we don't collect</h2>
       <ul>
@@ -1011,7 +1098,7 @@ function pagePrivacy() {
       </ul>
 
       <h2>Sessions — what the server stores</h2>
-      <p>When you use a session, your survey answers are encoded into an anonymous string (like <strong>WU1ZWU5NTll...</strong>) and stored in a JSON file on the server, associated only with the session code. There is no name, email, IP address, or any identifier attached to it. Sessions are automatically deleted after 48 hours.</p>
+      <p>When you use a session, your survey answers are encoded into an anonymous string (like <strong>WU1ZWU5NTll...</strong>) and stored in a JSON file on the server, associated only with the session code. There is no name, email, IP address, or any identifier attached to it. Sessions are automatically deleted after 7 days.</p>
       <p>If you use the manual "combine links" feature, no data is sent to the server at all — all computation happens in your browser.</p>
 
       <h2>What the server sees</h2>
@@ -1105,6 +1192,80 @@ document.addEventListener('click', function(e) {
   const el = e.target.closest('[data-a]');
   if (!el) return;
   const a = el.dataset.a;
+
+  if (a === 'create-submit') {
+    const optIn  = document.getElementById('opt-in-cb')?.checked || false;
+    const btn    = el;
+    const errEl  = document.getElementById('create-error');
+    btn.disabled = true; btn.textContent = 'Creating…';
+    fetch('/api/session/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({opt_in: optIn})
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) throw new Error(data.error);
+      const code     = data.code;
+      const shareUrl = `${window.location.origin}${window.location.pathname}#/join/${code}`;
+      const body     = document.getElementById('create-body');
+      if (!body) return;
+      body.innerHTML = `
+        <div class="card" style="text-align:left;">
+          <p class="label mb-3">Your session code</p>
+          <div class="session-code">${code}</div>
+          <p class="body-sm t-center mt-3">Share this code or the link below with your group</p>
+          <div class="share-link-box mt-4">${shareUrl}</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <button class="btn btn-ghost" style="flex:1;" data-a="copy" data-url="${shareUrl}" id="copy-btn">Copy Link</button>
+            <span class="copy-confirm" id="copy-ok">✓ Copied</span>
+          </div>
+        </div>
+        <div class="card card-yes mt-4" style="text-align:left;">
+          <p class="label mb-3">Now take the survey yourself</p>
+          <p class="body-sm" style="margin-bottom:14px;">Your answers submit directly to this session when you finish.</p>
+          <a href="#/join/${code}" class="btn btn-primary btn-full">Start the Survey →</a>
+        </div>
+        <a href="#/session/${code}" class="btn btn-ghost btn-full mt-4" style="font-size:13px;">View Session Results →</a>`;
+    })
+    .catch(() => {
+      btn.disabled = false; btn.textContent = 'Create Session →';
+      if (errEl) { errEl.textContent = 'Could not create session. Check your connection and try again.'; errEl.classList.add('show'); }
+    });
+    return;
+  }
+
+  if (a === 'start-over') {
+    if (confirm('Start over? This will clear all your answers.')) {
+      Object.keys(answers).forEach(k => delete answers[k]);
+      const sc = el.dataset.session;
+      navigate(sc ? `/survey/0/${sc}` : '/survey/0');
+    }
+    return;
+  }
+
+  if (a === 'share-results') {
+    const url  = el.dataset.url;
+    const text = decodeURIComponent(el.dataset.text || '');
+    if (navigator.share) {
+      navigator.share({ title: 'Our Common Ground — Discover Consent', url, text }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        const orig = el.textContent; el.textContent = '✓ Copied!';
+        setTimeout(() => el.textContent = orig, 2500);
+      });
+    }
+    return;
+  }
+
+  if (a === 'copy-text') {
+    const text = decodeURIComponent(el.dataset.results || '');
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = el.textContent; el.textContent = '✓ Copied!';
+      setTimeout(() => el.textContent = orig, 2500);
+    });
+    return;
+  }
 
   if (a === 'back') { navigate(el.dataset.hash); return; }
 
