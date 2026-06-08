@@ -176,7 +176,7 @@
       user-select: none;
     }
     .answer-btn:active { transform: scale(.96); }
-    .answer-btn:not(.selected):hover { border-color: var(--border-2); color: var(--text-2); }
+    .answer-btn:not(.sel-Y):not(.sel-M):not(.sel-N):hover { border-color: var(--border-2); color: var(--text-2); }
 
     .answer-btn.sel-Y { background: var(--yes-bg); border-color: var(--yes); color: var(--yes-text); }
     .answer-btn.sel-M { background: var(--maybe-bg); border-color: var(--maybe); color: var(--maybe-text); }
@@ -852,10 +852,10 @@ function pageSurvey(si) {
 
     <div class="questions-list" id="qlist">${qRows}</div>
 
-    <div class="survey-nav">
+    <div class="survey-nav" id="survey-nav" data-si="${si}">
       ${si > 0 ? `<button class="btn btn-ghost" data-a="back" data-si="${si}">← Back</button>` : ''}
       ${isLast
-        ? `<button class="btn btn-primary" id="finish-btn" data-a="finish" ${sectionDone ? '' : 'disabled'}>Get My Link</button>`
+        ? `<button class="btn btn-primary" id="finish-btn" data-a="finish" data-si="${si}" ${sectionDone ? '' : 'disabled'}>Get My Link</button>`
         : `<button class="btn btn-primary" id="next-btn" data-a="next" data-si="${si}" ${sectionDone ? '' : 'disabled'}>Continue →</button>`
       }
     </div>
@@ -1201,9 +1201,9 @@ document.addEventListener('click', function(e) {
 
     // Update continue/finish button state
     const actionBtn = document.querySelector('[data-a="next"], [data-a="finish"]');
-    if (actionBtn) {
-      const si = parseInt(actionBtn.closest('main')?.querySelector('[data-si]')?.dataset.si
-        ?? actionBtn.dataset.si ?? 0);
+    const navDiv = document.getElementById('survey-nav');
+    if (actionBtn && navDiv) {
+      const si = parseInt(navDiv.dataset.si ?? 0);
       const sqs = QUESTIONS.filter(q => q.si === si);
       const done = sqs.every(q => answers[q.gi]);
       actionBtn.disabled = !done;
