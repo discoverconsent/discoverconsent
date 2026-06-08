@@ -171,12 +171,22 @@
       font-size: 12px; font-weight: 500;
       letter-spacing: .08em; text-transform: uppercase;
       cursor: pointer;
-      transition: all .12s ease;
+      /* Only transition transform — don't animate bg/border on mobile (deferred repaint) */
+      transition: transform .1s ease;
       -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
       user-select: none;
+      /* Eliminate tap delay and text-selection gesture on iOS */
+      touch-action: manipulation;
     }
-    .answer-btn:active { transform: scale(.96); }
+    .answer-btn:active { transform: scale(.95); }
     .answer-btn:not(.sel-Y):not(.sel-M):not(.sel-N):hover { border-color: var(--border-2); color: var(--text-2); }
+
+    /* Immediate :active visual feedback BEFORE JS fires — pure CSS, no delay */
+    .answer-btn[data-val="Y"]:active { background: var(--yes-bg); border-color: var(--yes); color: var(--yes-text); }
+    .answer-btn[data-val="M"]:active { background: var(--maybe-bg); border-color: var(--maybe); color: var(--maybe-text); }
+    .answer-btn[data-val="N"]:active { background: rgba(255,255,255,.06); border-color: var(--border-2); color: var(--text); }
 
     .answer-btn.sel-Y { background: var(--yes-bg); border-color: var(--yes); color: var(--yes-text); }
     .answer-btn.sel-M { background: var(--maybe-bg); border-color: var(--maybe); color: var(--maybe-text); }
@@ -1183,48 +1193,62 @@ function pageAbout() {
 //  EVENTS
 // ═══════════════════════════════════════════════════════
 
+// Shared answer handler — called by both touchstart and click
+function handleAnswer(el) {
+  const qi = parseInt(el.dataset.qi);
+  const val = el.dataset.val;
+  answers[qi] = val;
+
+  // Update sibling buttons immediately
+  el.closest('.answer-group').querySelectorAll('.answer-btn').forEach(b => {
+    b.className = 'answer-btn' + (b.dataset.val === val ? ` sel-${val}` : '');
+  });
+
+  // Update continue/finish button state
+  const actionBtn = document.querySelector('[data-a="next"], [data-a="finish"]');
+  const navDiv = document.getElementById('survey-nav');
+  if (actionBtn && navDiv) {
+    const si = parseInt(navDiv.dataset.si ?? 0);
+    const sqs = QUESTIONS.filter(q => q.si === si);
+    const done = sqs.every(q => answers[q.gi]);
+    actionBtn.disabled = !done;
+
+    const hint = document.getElementById('hint');
+    if (hint) {
+      const rem = sqs.length - sqs.filter(q => answers[q.gi]).length;
+      hint.textContent = done ? '✓ Section complete — you can continue'
+        : `${rem} question${rem!==1?'s':''} left in this section`;
+      hint.className = 'survey-hint' + (done ? ' ok' : '');
+    }
+  }
+
+  // Update progress bar live
+  const prog = document.getElementById('prog');
+  if (prog) {
+    const pct = Math.round((Object.keys(answers).length / TOTAL) * 100);
+    prog.style.width = pct + '%';
+    const meta = document.querySelector('.survey-meta .label:last-child');
+    if (meta) meta.textContent = `${Object.keys(answers).length} / ${TOTAL} answered`;
+  }
+}
+
+// touchstart fires instantly on mobile — no 300ms delay
+document.addEventListener('touchstart', function(e) {
+  const el = e.target.closest('[data-a="answer"]');
+  if (!el) return;
+  el._handledByTouch = true;
+  handleAnswer(el);
+}, { passive: true });
+
 document.addEventListener('click', function(e) {
   const el = e.target.closest('[data-a]');
   if (!el) return;
   const a = el.dataset.a;
 
-  // ── Answer button ──
+  // ── Answer button (desktop only — mobile handled by touchstart) ──
   if (a === 'answer') {
-    const qi = parseInt(el.dataset.qi);
-    const val = el.dataset.val;
-    answers[qi] = val;
-
-    // Update sibling buttons
-    el.closest('.answer-group').querySelectorAll('.answer-btn').forEach(b => {
-      b.className = 'answer-btn' + (b.dataset.val === val ? ` sel-${val}` : '');
-    });
-
-    // Update continue/finish button state
-    const actionBtn = document.querySelector('[data-a="next"], [data-a="finish"]');
-    const navDiv = document.getElementById('survey-nav');
-    if (actionBtn && navDiv) {
-      const si = parseInt(navDiv.dataset.si ?? 0);
-      const sqs = QUESTIONS.filter(q => q.si === si);
-      const done = sqs.every(q => answers[q.gi]);
-      actionBtn.disabled = !done;
-
-      const hint = document.getElementById('hint');
-      if (hint) {
-        const rem = sqs.length - sqs.filter(q => answers[q.gi]).length;
-        hint.textContent = done ? '✓ Section complete — you can continue'
-          : `${rem} question${rem!==1?'s':''} left in this section`;
-        hint.className = 'survey-hint' + (done ? ' ok' : '');
-      }
-    }
-
-    // Update progress bar live
-    const prog = document.getElementById('prog');
-    if (prog) {
-      const pct = Math.round((Object.keys(answers).length / TOTAL) * 100);
-      prog.style.width = pct + '%';
-      const meta = document.querySelector('.survey-meta .label:last-child');
-      if (meta) meta.textContent = `${Object.keys(answers).length} / ${TOTAL} answered`;
-    }
+    if (el._handledByTouch) { el._handledByTouch = false; return; }
+    handleAnswer(el);
     return;
   }
 
